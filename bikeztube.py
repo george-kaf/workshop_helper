@@ -2,6 +2,9 @@ from tkinter import *
 from tkinter import ttk
 import tkcalendar as cal
 import sqlite3
+from tkinter import font
+from PIL import Image, ImageTk
+
 
 root = Tk()
 root.title("Bikeztube")
@@ -133,6 +136,47 @@ def fixed_bike():
     query_database()
 
 
+def ser_add_to_comments():
+    x = ser_combo.get()
+    x = x + ', '
+    comments_entry.insert(END,x)
+    
+def parts_add_to_comments():
+    x = parts_combo.get()
+    x = x + ', '
+    comments_entry.insert(END,x)   
+
+def get_history():
+
+    top = Toplevel(root) 
+    top.state('zoomed') 
+
+    hist_frame = LabelFrame(top, pady=10, text="Service History", padx=15,)
+    hist_frame.pack(fill='both', expand=True, padx=20, pady=20)
+
+    hist_list = Listbox(hist_frame, width=40, height=10, font=('Verdana', 15))
+    hist_list.pack(side=LEFT, pady=0, fill='both', expand=True)
+
+    conn = sqlite3.connect('bikes.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM history')
+
+    records = c.fetchall()
+    hist_list_from_sql = []
+
+    for record in records:
+        hist_list_from_sql.append(record[0])
+
+    for i in hist_list_from_sql:
+        x=0
+        hist_list.insert(x, i)
+        x+1
+
+    conn.commit()
+    conn.close()
+
+    top.mainloop()
+    
 #frame for listbox and entries
 cust_frame = LabelFrame(root, pady=10, text="Bikes For Service", padx=15,)
 cust_frame.pack(fill='both', expand=True, padx=20, pady=20)
@@ -143,7 +187,7 @@ cust_list.pack(side=LEFT, pady=0, fill='both', expand=True)
 entries_frame = Frame(cust_frame, pady=10)
 entries_frame.pack(fill='both', expand=True)
 
-date_entry = cal.DateEntry(entries_frame, width=17)
+date_entry = cal.DateEntry(entries_frame, width=17, date_pattern='dd/MM/yyyy')
 date_entry.grid(row=0, column=0, padx=10, pady=10)
 
 name_label = Label(entries_frame, text="Name")
@@ -170,16 +214,47 @@ comments_label.grid(row=7, column=0, pady=2, padx=10)
 comments_frame = Frame(entries_frame)
 comments_frame.grid(row=8, column=0, pady=2, padx=10)
 comments_entry = Text(comments_frame, width=20, height=10, font=(21))
+
 comments_entry.pack(fill='both', expand=True)
 
+combo_frame = Frame(entries_frame)
+combo_frame.grid(row=9, column=0, pady=2, padx=20)
+
+comboValuesServices = ['+Basic Service', '+Second Service', '+Full Service']
+comboValuesParts = ['+Inner tube R', '+Inner tube F', '+Tyre R', '+Tyre F', 
+'+Brake Pads R', '+Brake Pads F', '+Chain', '+Cassette', '+Drivetrain', '+Derailleur R', 
+'+Derailleur F', '+G. Shifter R', '+G. Shifter F', '+Cable(s)', '+Hanger', '+Brake Lever(s)',
+'+Wheel R', '+Wheel F', '+Bleed', '+Other: ']
+
+
+ser_frame = Frame(combo_frame)
+ser_frame.pack(pady=15)
+
+parts_frame = Frame(combo_frame)
+parts_frame.pack()
+
+bigfont = font.Font(family="Verdana",size=12)
+root.option_add("*TCombobox*Listbox*Font", bigfont)
+
+ser_combo = ttk.Combobox(ser_frame, values =comboValuesServices, state='readonly', font=('Verdana',10))
+ser_combo.set('Basic Service')
+ser_combo.grid(row=0, column=0)
+
+add_button_plus = Button(ser_frame, text='+', command=ser_add_to_comments,  bg="yellow green", font=('Verdana',12, 'bold'), width=2)
+add_button_plus.grid(row=1, column=0, sticky=W, pady=5)
+
+parts_combo = ttk.Combobox(parts_frame, values =comboValuesParts, state='readonly', font=('Verdana',10))
+parts_combo.set('Inner tube R')
+parts_combo.grid(row=2, column=0)
+
+add_button_plus = Button(parts_frame, text='+', command=parts_add_to_comments,  bg="yellow green", font=('Verdana',12, 'bold'), width=2)
+add_button_plus.grid(row=3, column=0, sticky=W, pady=5)
+
 add_button = Button(entries_frame, text="Add Bike",  bg="yellow green", command=add_bike, width=25)
-add_button.grid(row=9, column=0, padx=10, pady=10)
+add_button.grid(row=10, column=0, padx=10, pady=10)
 
 fixed_button = Button(entries_frame, text="Bike Fixed",  bg="yellow green",width=25 , command=fixed_bike)
-fixed_button.grid(row=10, column=0, padx=10, pady=10)
-
-rtext_button = Button(entries_frame, text="Copy Ready Text",  bg="yellow green",width=25 , command=copy_ready_text)
-rtext_button.grid(row=11, column=0, padx=10, pady=10)
+fixed_button.grid(row=11, column=0, padx=10, pady=10)
 
 phone_button = Button(entries_frame, text="Copy Phone Number",  bg="yellow green",width=25 , command=grab_phone)
 phone_button.grid(row=12, column=0, padx=10, pady=10)
@@ -187,6 +262,8 @@ phone_button.grid(row=12, column=0, padx=10, pady=10)
 del_button = Button(entries_frame, text="Delete Bike",  bg="yellow green",width=25 , command=delete_bike)
 del_button.grid(row=13, column=0, padx=10, pady=10)
 
+hist_button = Button(entries_frame, text="Service History",  bg="yellow green",width=25 , command=get_history)
+hist_button.grid(row=14, column=0, padx=10, pady=10)
 
 query_database()
 
