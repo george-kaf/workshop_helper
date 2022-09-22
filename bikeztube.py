@@ -117,7 +117,6 @@ def update_bike():
         name = :name,
         phone = :phone,
         bike = :bike,
-        id = :id,
         date = :date,
         work = :work,
         total = :total
@@ -127,24 +126,20 @@ def update_bike():
                 'name':name_entry.get(),
                 'phone':phone_entry.get(),
                 'bike':bike_entry.get(),
-                'id':id_entry.get(),
+                'oid':id_entry.get(),
                 'date':date_entry.get(),
-                'work':work_entry.get(),
+                'work':work_entry.get('1.0', END),
                 'total':total_price_entry.get()
 
         }
     )
 
+    conn.commit()
+    conn.close()
 
-    name_entry.delete(0, END)
-    phone_entry.delete(0, END)
-    bike_entry.delete(0, END)
-    id_entry.delete(0, END)
-    date_entry.delete(0, END)
-    work_entry.delete('1.0', END)
-    total_price_entry.delete(0, END)
-
+    my_tree.delete(*my_tree.get_children())
     query_database()
+
 
 def delete_bike():
 
@@ -370,7 +365,7 @@ bike_entry.grid(row=8, column=0, pady=2, padx=10)
 work_label = Label(entries_frame, text="Work")
 work_label.grid(row=9, column=0, pady=2, padx=10)
 
-work_entry = Text(entries_frame, font=('Verdana',12), height=8, width=20)
+work_entry = ScrolledText(entries_frame, font=('Verdana',12), height=5, width=20)
 work_entry.grid(row=10, column=0, pady=2, padx=10)
 
 total_price_label = Label(entries_frame, text="Total")
@@ -418,14 +413,11 @@ add_button.grid(row=14, column=0, padx=10, pady=5)
 fixed_button = Button(entries_frame, text="Bike Fixed",  bg="yellow green",width=25 , command=fixed_bike)
 fixed_button.grid(row=15, column=0, padx=10, pady=5)
 
-phone_button = Button(entries_frame, text="Copy Phone Number",  bg="yellow green",width=25 , command=grab_phone)
-phone_button.grid(row=16, column=0, padx=10, pady=5)
-
 del_button = Button(entries_frame, text="Delete Bike",  bg="yellow green",width=25 , command=delete_bike)
-del_button.grid(row=17, column=0, padx=10, pady=5)
+del_button.grid(row=16, column=0, padx=10, pady=5)
 
 update_bike_button = Button(entries_frame, text="Update Bike",  bg="yellow green",width=25 , command=update_bike)
-update_bike_button.grid(row=18, column=0, padx=10, pady=5)
+update_bike_button.grid(row=17, column=0, padx=10, pady=5)
 
 buttons_left_frame = Frame(my_tree_frame)
 buttons_left_frame.pack(fill='x', pady=20)
@@ -439,7 +431,8 @@ import_data.pack(side=LEFT, padx=20)
 export_data = Button(buttons_left_frame, text="Export Data",  bg="lightgrey",width=25)
 export_data.pack(side=LEFT)
 
-
+phone_button = Button(buttons_left_frame, text="Copy Phone Number",  bg="lightgrey",width=25 , command=grab_phone)
+phone_button.pack(side=LEFT, padx=20)
 
 my_tree.bind("<ButtonRelease-1>", select_record)
 
