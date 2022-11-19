@@ -686,10 +686,10 @@ lower_widg_frame = Frame(lower_frame)
 lower_widg_frame.pack(fill='x', expand=1, pady=0)
 
 work_frame_top = Frame(lower_widg_frame)
-work_frame_top.pack(side=LEFT)
+work_frame_top.pack(fill='x', expand=1, side=LEFT)
 
 work_label = Label(work_frame_top, text="Work (Εξαρτημα κενο τιμη κενο, F=front, R=rear, αμα ειναι δυο x κενο 2 κενο)", font=('Verdana', 11))
-work_label.pack(pady=5, anchor=W)
+work_label.pack(pady=5, anchor=W,fill='x', expand=1)
 
 work_entry = Text(work_frame_top, font=('Verdana', 12, 'bold'), wrap=WORD, height=7)
 work_entry.pack()
