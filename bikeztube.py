@@ -3,10 +3,10 @@ from tkinter import ttk
 import tkcalendar as cal
 import sqlite3
 from tkinter import font
-import messagebox
+from tkinter import messagebox 
 from itertools import count
 from tkinter.scrolledtext import ScrolledText
-
+from datetime import date
 
 root = Tk()
 root.title("Bikeztube")
@@ -68,7 +68,6 @@ def add_bike():
     phone_entry.delete(0, END)
     bike_entry.delete(0, END)
     id_entry.delete(0, END)
-    date_entry.delete(0, END)
     work_entry.delete('1.0', END)
     total_price_entry.delete(0, END)
     
@@ -88,9 +87,9 @@ def query_database():
 
     for record in records:
         if count % 2 ==0:
-            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[8], record[1], record[2], record[3], record[0], record[5], record[6], record[7]), tags=('evenrow',))
+            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[8], record[1], record[2], record[3], record[0], record[5], record[7]), tags=('evenrow',))
         else:
-            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[8], record[1], record[2], record[3], record[0], record[5], record[6], record[7]), tags=('oddrow',))
+            my_tree.insert(parent='', index='end', iid=count, text='', values=(record[8], record[1], record[2], record[3], record[0], record[5], record[7]), tags=('oddrow',))
         #increment counter
         count +=1
 
@@ -106,41 +105,47 @@ def clear_entries():
     id_entry.delete(0, END)
     work_entry.delete('1.0', END)
     total_price_entry.delete(0, END)
+    date_entry.delete(0, END)
+    date_entry.set_date(date.today())
 
     
 
 def update_bike():
+    MsgBox = messagebox.askquestion ('Update bike','Are you sure?')
+    if MsgBox == 'yes':
+        selected = my_tree.focus()
+        my_tree.item(selected, text='', values=(name_entry.get(),phone_entry.get(), bike_entry.get(), id_entry.get(), date_entry.get(), work_entry.get('1.0', END), total_price_entry.get()))
 
-    selected = my_tree.focus()
-    my_tree.item(selected, text='', values=(name_entry.get(),phone_entry.get(), bike_entry.get(), id_entry.get(), date_entry.get(), work_entry.get('1.0', END), total_price_entry.get()))
+        conn = sqlite3.connect('bikes.db')
+        c = conn.cursor()
+        c.execute("""UPDATE bikes SET
+            name = :name,
+            phone = :phone,
+            bike = :bike,
+            date = :date,
+            work = :work,
+            total = :total
+            WHERE oid = :oid""",
+            {
+                    'name':name_entry.get(),
+                    'phone':phone_entry.get(),
+                    'bike':bike_entry.get(),
+                    'oid':id_entry.get(),
+                    'date':date_entry.get(),
+                    'work':work_entry.get('1.0', END),
+                    'total':total_price_entry.get()
 
-    conn = sqlite3.connect('bikes.db')
-    c = conn.cursor()
-    c.execute("""UPDATE bikes SET
-        name = :name,
-        phone = :phone,
-        bike = :bike,
-        date = :date,
-        work = :work,
-        total = :total
-        WHERE oid = :oid""",
-        {
-                'name':name_entry.get(),
-                'phone':phone_entry.get(),
-                'bike':bike_entry.get(),
-                'oid':id_entry.get(),
-                'date':date_entry.get(),
-                'work':work_entry.get('1.0', END),
-                'total':total_price_entry.get()
+            }
+        )
 
-        }
-    )
+        conn.commit()
+        conn.close()
 
-    conn.commit()
-    conn.close()
-
-    my_tree.delete(*my_tree.get_children())
-    query_database()
+        my_tree.delete(*my_tree.get_children())
+        clear_entries()
+        query_database()
+    else:
+        pass
 
 def fixed_ready():
 
@@ -189,17 +194,21 @@ def fixed_ready():
         query_database()
 
 def delete_bike():
-    x = my_tree.selection()[0]
-    my_tree.delete(x)
+    MsgBox = messagebox.askquestion ('Update bike','Are you sure?')
+    if MsgBox == 'yes':
+        x = my_tree.selection()[0]
+        my_tree.delete(x)
 
-    conn = sqlite3.connect('bikes.db')
-    c = conn.cursor()
-    c.execute("DELETE from bikes WHERE oid=" + id_entry.get())
-    conn.commit()
-    conn.close()
-    clear_entries()
+        conn = sqlite3.connect('bikes.db')
+        c = conn.cursor()
+        c.execute("DELETE from bikes WHERE oid=" + id_entry.get())
+        conn.commit()
+        conn.close()
+        clear_entries()
 
-    messagebox.showinfo("Deleted!", "Your Bike Has Been Deleted!")
+        messagebox.showinfo("Deleted!", "Your Bike Has Been Deleted!")
+    else:
+        pass
 
 
 def grab_phone():
@@ -245,15 +254,11 @@ def fixed_bike():
 
 
 def ser_add_to_comments():
-    x = ser_combo.get()
-    x = x + ' +  '
-    work_entry.insert(END,x)
+    pass
 
     
 def parts_add_to_comments():
-    x = parts_combo.get()
-    x = x + ' +  '
-    work_entry.insert(END,x)   
+    pass
 
 
 def get_history():
@@ -338,21 +343,74 @@ def get_history():
             total_price_entry2.insert(0, values[6])
         except:
             pass   
-
-    def query_history():
+    
+    def reset():
+        my_hist_tree.delete(*my_hist_tree.get_children())
         global count
         count = 0
         conn = sqlite3.connect('bikes.db')
         c = conn.cursor()
         c.execute('SELECT rowid, * FROM history')
 
-        records = c.fetchall()
+        name_entry2.delete(0, END)
+        phone_entry2.delete(0, END)
+        bike_entry2.delete(0, END)
+        id_entry2.delete(0, END)
+        date_entry2.delete(0, END)
+        work_entry2.delete('1.0', END)
+        total_price_entry2.delete(0, END)
+
+        results = c.fetchall()
+
+        records = sorted(results, key=lambda tup: tup[0], reverse=True)
 
         for record in records:
             if count % 2 ==0:
-                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(record[1], record[2], record[3], record[0], record[5], record[6], record[7]), tags=('evenrow',))
+                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('evenrow',))
             else:
-                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(record[1], record[2], record[3], record[0], record[5], record[6], record[7]), tags=('oddrow',))
+                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('oddrow',))
+            #increment counter
+            count +=1
+
+        conn.commit()
+        conn.close() 
+
+
+    def searcht():
+        query = searchbox_entry.get()
+        selections = []
+        for child in my_hist_tree.get_children():
+                selections.append(my_hist_tree.item(child)['values'])
+        my_hist_tree.delete(*my_hist_tree.get_children())
+
+        s_results = []
+        for i in selections:
+            if query.lower() in (str(i)).lower(): 
+                s_results.append(i)
+
+        for l in s_results:
+            global count
+            my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(l[0], str(l[1]), l[2], l[3], l[4], l[5], l[6]))
+            count +=1
+   
+
+
+    def query_history():
+
+        global count
+        count = 0
+        conn = sqlite3.connect('bikes.db')
+        c = conn.cursor()
+        c.execute('SELECT rowid, * FROM history')
+
+        results = c.fetchall()
+        records = sorted(results, key=lambda tup: tup[0], reverse=True)
+
+        for record in records:
+            if count % 2 ==0:
+                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('evenrow',))
+            else:
+                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('oddrow',))
             #increment counter
             count +=1
 
@@ -379,7 +437,7 @@ def get_history():
     my_hist_tree.column("Bike", anchor=CENTER, width=200)
     my_hist_tree.column("ID", anchor=CENTER, width=90)
     my_hist_tree.column("Date", anchor=CENTER, width=110)
-    my_hist_tree.column("Work", anchor=CENTER, width=700)
+    my_hist_tree.column("Work", anchor=CENTER, width=300)
     my_hist_tree.column("Total", anchor=CENTER, width=80)
 
     my_hist_tree.heading("#0", text="", anchor=CENTER)
@@ -406,13 +464,19 @@ def get_history():
     search_frame.pack(fill='x')
 
     searchbox_label = Label(search_frame, text='Search :')
-    searchbox_label.pack(fill='x')
+    searchbox_label.pack(anchor=W, padx=10)
 
     searchbox_entry = Entry(search_frame)
-    searchbox_entry.pack(fill='x', pady=10)
+    searchbox_entry.pack( padx=10, pady=0, side=LEFT)
+
+    reset_button = Button(search_frame, text='Reset', command=reset, background='yellowgreen')
+    reset_button.pack(side=RIGHT)
+
+    search_button = Button(search_frame, text='Go', command=searcht, background='yellowgreen')
+    search_button.pack(padx=5, side=RIGHT, ipadx=7)
 
     entries_frame2 = Frame(entries_frame, pady=10)
-    entries_frame2.pack(pady=20)
+    entries_frame2.pack(pady=10)
 
     date_entry2 = cal.DateEntry(entries_frame2, width=17, date_pattern='dd/MM/yyyy')
     date_entry2.grid(row=0, column=0, padx=10)
@@ -444,7 +508,7 @@ def get_history():
     work_label2 = Label(entries_frame2, text="Work")
     work_label2.grid(row=9, column=0, pady=2, padx=10)
 
-    work_entry2 = ScrolledText(entries_frame2, font=('Times New Roman', 12, 'bold'), height=7, width=22, wrap=WORD)
+    work_entry2 = ScrolledText(entries_frame2, font=('Verdana', 12, 'bold'), height=7, width=17, wrap=WORD)
     work_entry2.grid(row=10, column=0, pady=2, padx=10)
 
     total_price_label2 = Label(entries_frame2, text="Total")
@@ -474,6 +538,8 @@ def get_history():
 def select_record(e):
 
     try:
+
+
         name_entry.delete(0, END)
         phone_entry.delete(0, END)
         bike_entry.delete(0, END)
@@ -490,8 +556,16 @@ def select_record(e):
         bike_entry.insert(0, values[3])
         id_entry.insert(0, values[4])
         date_entry.insert(0, values[5])
-        work_entry.insert('1.0', values[6])
-        total_price_entry.insert(0, values[7])
+        total_price_entry.insert(0, values[6])
+
+        conn = sqlite3.connect('bikes.db')
+        c = conn.cursor()
+        c.execute('SELECT work FROM bikes WHERE oid=?', (id_entry.get(),))
+        res = c.fetchall()
+
+        for i in res:
+            work_entry.insert('1.0', i[0])
+
     except:
         pass    
 
@@ -500,23 +574,42 @@ def select_record(e):
 cust_frame = Frame(root)
 cust_frame.pack(fill='both', expand=True, padx=20, pady=20)
 
-my_tree_frame = Frame(cust_frame)
+upper_frame = Frame(cust_frame)
+upper_frame.pack(fill='both', expand=1)
+
+lower_frame = Frame(cust_frame)
+lower_frame.pack(fill='both', expand=1)
+
+my_tree_frame = Frame(upper_frame)
 my_tree_frame.pack(pady=0, padx=0, side=LEFT, expand=True, fill='both')
+
 
 my_tree = ttk.Treeview(my_tree_frame, selectmode='extended')
 my_tree.pack(fill='both', expand=True)
 
-my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date', 'Work', 'Total')
+second_but_frame = Frame(my_tree_frame)
+second_but_frame.pack(fill='x', expand=1)
+
+ready_button = Button(second_but_frame, text="Ready ✓", font=('Verdana',12, 'bold'), bg="yellowgreen",width=18 , command=fixed_ready)
+ready_button.pack(side=LEFT)
+
+get_hist_button = Button(second_but_frame, text="Service History ⇆", font=('Verdana', 12, 'bold'),  bg="yellowgreen",width=18 , command=get_history)
+get_hist_button.pack(side=LEFT, padx=10, pady=10)
+
+del_button = Button(second_but_frame, text="Delete x", font=('Verdana', 12, 'bold'),  bg="yellowgreen",width=18 , command=delete_bike)
+del_button.pack(side=LEFT, padx=0, pady=0)
+
+
+my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
 my_tree.column('#0', width=0, stretch=NO)
-my_tree.column("Ready", anchor=CENTER, width=60)
+my_tree.column("Ready", anchor=CENTER, width=40)
 my_tree.column("Name", anchor=CENTER, width=120)
-my_tree.column("Phone", anchor=CENTER, width=120)
+my_tree.column("Phone", anchor=CENTER, width=90)
 my_tree.column("Bike", anchor=CENTER, width=200)
 my_tree.column("ID", anchor=CENTER, width=90)
-my_tree.column("Date", anchor=CENTER, width=110)
-my_tree.column("Work", anchor=CENTER, width=700)
-my_tree.column("Total", anchor=CENTER, width=80)
+my_tree.column("Date", anchor=CENTER, width=70)
+my_tree.column("Total", anchor=CENTER, width=40)
 
 my_tree.heading("#0", text="", anchor=CENTER)
 my_tree.heading("Ready", text="Ready", anchor=CENTER)
@@ -525,7 +618,6 @@ my_tree.heading("Phone", text="Phone", anchor=CENTER)
 my_tree.heading("Bike", text="Bike", anchor=CENTER)
 my_tree.heading("ID", text="ID", anchor=CENTER)
 my_tree.heading("Date", text="Date", anchor=CENTER)
-my_tree.heading("Work", text="Work", anchor=CENTER)
 my_tree.heading("Total", text="Total", anchor=CENTER)
 
 my_tree.tag_configure('oddrow', background= 'white')
@@ -533,113 +625,74 @@ my_tree.tag_configure('evenrow',background='lightgrey', foreground='black')
 
 s = ttk.Style()
 s.theme_use('clam')
-s.configure('Treeview.Heading', background="yellowgreen", foreground='black', font=('Verdana', 15), height=15)
+s.configure('Treeview.Heading', background="yellowgreen", foreground='black', font=('Verdana', 15), height=8)
 s.configure('Treeview', rowheight=40, font=('Verdana' ,11))
 
-entries_frame = Frame(cust_frame, pady=10)
+entries_frame = Frame(upper_frame, pady=10)
 entries_frame.pack(fill='y', expand=True, side=RIGHT)
 
-date_entry = cal.DateEntry(entries_frame, width=17, date_pattern='dd/MM/yyyy')
-date_entry.grid(row=0, column=0, padx=10)
+date_entry = cal.DateEntry(entries_frame, width=17, date_pattern='dd/MM/yyyy', font=('Verdana', 11))
+date_entry.grid(row=0, column=0, padx=20, sticky=W)
 
 id_label = Label(entries_frame, text="ID (Always Leave Empty!)")
 id_label.grid(row=1, column=0, pady=2, padx=10)
 
-id_entry = Entry(entries_frame, font=('Verdana',12), width=20)
+id_entry = Entry(entries_frame, font=('Verdana',14), width=20)
 id_entry.grid(row=2, column=0, pady=2, padx=10)
 
 name_label = Label(entries_frame, text="Name")
 name_label.grid(row=3, column=0, pady=2, padx=10)
 
-name_entry = Entry(entries_frame, font=('Verdana',12), width=20)
+name_entry = Entry(entries_frame, font=('Verdana',14), width=20)
 name_entry.grid(row=4, column=0, pady=2, padx=10)
 
 phone_label = Label(entries_frame, text="Phone")
 phone_label.grid(row=5, column=0, pady=2, padx=10)
 
-phone_entry = Entry(entries_frame, font=('Verdana',12), width=20)
+phone_entry = Entry(entries_frame, font=('Verdana',14), width=20)
 phone_entry.grid(row=6, column=0, pady=2, padx=10)
 
 bike_label = Label(entries_frame, text="Bike")
 bike_label.grid(row=7, column=0, pady=2, padx=10)
 
-bike_entry = Entry(entries_frame, font=('Verdana',12), width=20)
+bike_entry = Entry(entries_frame, font=('Verdana',14), width=20)
 bike_entry.grid(row=8, column=0, pady=2, padx=10)
 
-work_label = Label(entries_frame, text="Work")
-work_label.grid(row=9, column=0, pady=2, padx=10)
-
-work_entry = ScrolledText(entries_frame, font=('Times New Roman', 12, 'bold'), height=7, width=22, wrap=WORD)
-work_entry.grid(row=10, column=0, pady=2, padx=10)
-
 total_price_label = Label(entries_frame, text="Total")
-total_price_label.grid(row=11, column=0, pady=2, padx=10)
+total_price_label.grid(row=9, column=0, pady=2, padx=10)
 
-total_price_entry = Entry(entries_frame, font=('Verdana',12, 'bold'), width=18)
-total_price_entry.grid(row=12, column=0, pady=2, padx=10)
+total_price_entry = Entry(entries_frame, font=('Verdana',14), width=20)
+total_price_entry.grid(row=10, column=0, pady=2, padx=10)
 
 combo_frame = Frame(entries_frame)
-combo_frame.grid(row=13, column=0, pady=2, padx=20)
+combo_frame.grid(row=11, column=0, pady=2, padx=20)
 
-comboValuesServices = ['Basic Service', 'Second Service', 'Full Service']
-comboValuesParts = ['Inner tube R', 'Inner tube F', 'Tyre R', 'Tyre F', 
-'Brake Pads R', 'Brake Pads F', 'Chain', 'Cassette', 'Drivetrain', 'Derailleur R', 
-'Derailleur F', 'G. Shifter R', 'G. Shifter F', 'Cable(s)', 'Hanger', 'Brake Lever(s)',
-'Wheel R', 'Wheel F', 'Bleed', 'Other: ']
+main_but_frame = Frame(entries_frame)
+main_but_frame.grid(row=14, column=0, padx=12, pady=15)
 
+clear_but = Button(main_but_frame, text="Clear  -",  bg="yellow green", font=('Verdana', 11, 'bold'), command=clear_entries, width=25)
+clear_but.pack(pady=0)
 
-ser_frame = Frame(combo_frame)
-ser_frame.pack(pady=15)
+add_button = Button(main_but_frame, text="Add  +",  bg="yellow green", font=('Verdana', 11, 'bold'), command=add_bike, width=25)
+add_button.pack(pady=0)
 
-parts_frame = Frame(combo_frame)
-parts_frame.pack()
+update_bike_button = Button(main_but_frame, text="Update  ↺ ", font=('Verdana', 11, 'bold'),  bg="yellow green", width=25 , command=update_bike)
+update_bike_button.pack(pady=0)
 
-bigfont = font.Font(family="Times New Roman",size=13, weight='bold')
-root.option_add("*TCombobox*Listbox*Font", bigfont)
+fixed_button = Button(main_but_frame, text="Fixed  👍", font=('Verdana', 11, 'bold'),  bg="yellow green", width=25 , command=fixed_bike)
+fixed_button.pack(pady=0)
 
-ser_combo = ttk.Combobox(ser_frame, width=15, values =comboValuesServices, state='readonly', font=('Times New Roman',13, 'bold'))
-ser_combo.set('Basic Service')
-ser_combo.grid(row=0, column=0, padx=10)
+lower_widg_frame = Frame(lower_frame)
+lower_widg_frame.pack(fill='x', expand=1, pady=0)
 
-add_button_plus = Button(ser_frame, text='+', command=ser_add_to_comments,  bg="yellow green", font=('Verdana',12, 'bold'))
-add_button_plus.grid(row=0, column=1)
+work_frame_top = Frame(lower_widg_frame)
+work_frame_top.pack(side=LEFT)
 
-parts_combo = ttk.Combobox(parts_frame, width=15, values =comboValuesParts, state='readonly', font=('Times New Roman',13, 'bold'))
-parts_combo.set('Inner tube R')
-parts_combo.grid(row=1, column=0, padx=10)
+work_label = Label(work_frame_top, text="Work (Εξαρτημα κενο τιμη κενο, F=front, R=rear, αμα ειναι δυο x κενο 2 κενο)", font=('Verdana', 11))
+work_label.pack(pady=5, anchor=W)
 
-add_button_plus = Button(parts_frame, text='+', command=parts_add_to_comments,  bg="yellow green", font=('Verdana',12, 'bold'))
-add_button_plus.grid(row=1, column=1)
-
-add_button = Button(entries_frame, text="Add Bike",  bg="yellow green", command=add_bike, width=25)
-add_button.grid(row=14, column=0, padx=10, pady=5)
-
-ready_button = Button(entries_frame, text="Bike Ready",  bg="yellow green",width=25 , command=fixed_ready)
-ready_button.grid(row=15, column=0, padx=10, pady=5)
-
-del_button = Button(entries_frame, text="Delete Bike",  bg="yellow green",width=25 , command=delete_bike)
-del_button.grid(row=16, column=0, padx=10, pady=5)
-
-update_bike_button = Button(entries_frame, text="Update Bike",  bg="yellow green",width=25 , command=update_bike)
-update_bike_button.grid(row=17, column=0, padx=10, pady=5)
-
-fixed_button = Button(entries_frame, text="Bike Fixed",  bg="yellow green",width=25 , command=fixed_bike)
-fixed_button.grid(row=18, column=0, padx=10, pady=5)
-
-buttons_left_frame = Frame(my_tree_frame)
-buttons_left_frame.pack(fill='x', pady=20)
-
-get_hist_button = Button(buttons_left_frame, text="Service History",  bg="yellow green",width=25 , command=get_history)
-get_hist_button.pack(side=LEFT)
-
-import_data = Button(buttons_left_frame, text="Import Data",  bg="lightgrey",width=25)
-import_data.pack(side=LEFT, padx=20)
-
-export_data = Button(buttons_left_frame, text="Export Data",  bg="lightgrey",width=25)
-export_data.pack(side=LEFT)
-
-phone_button = Button(buttons_left_frame, text="Copy Phone Number",  bg="lightgrey",width=25 , command=grab_phone)
-phone_button.pack(side=LEFT, padx=20)
+work_entry = Text(work_frame_top, font=('Verdana', 12, 'bold'), wrap=WORD, height=7)
+work_entry.pack()
 
 my_tree.bind("<ButtonRelease-1>", select_record)
 
