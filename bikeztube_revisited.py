@@ -23,7 +23,7 @@ screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
 set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
-set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
 
 #CREATE DATABASE TABLE or CONNECT
 conn = sqlite3.connect('bikes.db')
@@ -426,30 +426,32 @@ menu_width = (screen_width/9)
 button_width = int(menu_width/14)
 
 main_frame = CTkFrame(root)
-main_frame.pack(fill=BOTH, expand=1, pady=button_width, padx=button_width)
+main_frame.pack(fill=BOTH, expand=1)
 
 menu_frame = CTkFrame(main_frame, width=menu_width)
-menu_frame.pack(side=BOTTOM,fill=X, padx=50)
+menu_frame.pack(side=BOTTOM,fill=X, padx=button_width*3, pady=button_width*3)
+
+print(button_width)
 
 butt_padx = int(button_width)
 butt_pady = int(button_width)
 
-butt1 = CTkButton(menu_frame, text='Add', command=add_bike, font=('arial', int(button_width*3), 'bold'))
+butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('arial', int(button_width*3), 'bold'))
 butt1.grid(row=0, column=0, ipady=button_width, ipadx=int(button_width*3), pady=button_width, padx=button_width)
 
-butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('arial',  int(button_width*2), 'bold'))
+butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('arial',  int(button_width*2)))
 butt2.grid(row=0, column=1, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt3 = CTkButton(menu_frame, text='Ready', command=fixed_ready, font=('arial',  int(button_width*2), 'bold'))
+butt3 = CTkButton(menu_frame, text='Ready', command=fixed_ready, font=('arial',  int(button_width*2)))
 butt3.grid(row=0, column=2, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt4 = CTkButton(menu_frame, text='Picked Up', font=('arial',  int(button_width*2), 'bold'))
+butt4 = CTkButton(menu_frame, text='Picked Up', font=('arial',  int(button_width*2)))
 butt4.grid(row=0, column=3, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt5 = CTkButton(menu_frame, text='History', font=('arial',  int(button_width*2), 'bold'))
+butt5 = CTkButton(menu_frame, text='History', font=('arial',  int(button_width*2)))
 butt5.grid(row=0, column=4, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt6 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('arial',  int(button_width*2), 'bold'))
+butt6 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('arial',  int(button_width*2)))
 butt6.grid(row=0, column=5, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
 Grid.rowconfigure(menu_frame, index=0, weight=1)
@@ -464,17 +466,33 @@ for button in button_list:
     column_number += 1
 
 
+# appearance_frame = CTkFrame(main_frame)
+# appearance_frame.pack(side=TOP)
+
+def change_appearance_mode_event(new_appearance_mode: str):
+    set_appearance_mode(new_appearance_mode)
+
+
+appearance_mode_label = CTkLabel(main_frame, text="Appearance Mode:", anchor="w")
+appearance_mode_label.pack(side=TOP, anchor=NE, padx=button_width*2)
+
+appearance_mode_optionemenu = CTkOptionMenu(main_frame, values=["Dark", "Light"], command=change_appearance_mode_event)
+appearance_mode_optionemenu.pack(side=TOP, anchor=NE, padx=button_width*2)
+
 
 
 
 content_frame = CTkFrame(main_frame)
-content_frame.pack(side=LEFT, fill=BOTH, expand=1, pady=20, padx=20)
+content_frame.pack(side=TOP, fill=BOTH, expand=1, pady=button_width*3, padx=button_width*3)
+
+
+
 
 my_tree_frame = CTkFrame(content_frame)
 my_tree_frame.pack( side=LEFT, expand=True, fill='both')
 
 my_tree = ttk.Treeview(my_tree_frame, selectmode='extended')
-my_tree.pack(fill='both', expand=True, padx=50)
+my_tree.pack(fill='both', expand=True)
 
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
