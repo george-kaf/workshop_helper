@@ -22,7 +22,7 @@ root.state("zoomed")
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 
-set_appearance_mode("light")  # Modes: "System" (standard), "Dark", "Light"
+set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
 set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 #CREATE DATABASE TABLE or CONNECT
@@ -59,7 +59,12 @@ conn.close()
 
 def add_bike():
 
-    last = my_tree.get_children()[-1]
+    try:
+        last = my_tree.get_children()[-1]
+    except:
+        last=0
+
+
 
     def add_bike_to_database():
         
@@ -80,13 +85,16 @@ def add_bike():
         conn.commit()
         conn.close()
 
-    
+
         add_level.destroy()
         my_tree.delete(*my_tree.get_children())
         query_database()
 
-    add_level = Toplevel(root)
+    add_level = CTkToplevel(root)
     add_level.title("Add Customer")
+
+    work_width = int(screen_width/3)
+    add_level.wm_transient(root)    
 
     entries_buttons_and_work = CTkFrame(add_level)
     entries_buttons_and_work.pack(fill='both', expand=True)
@@ -108,7 +116,7 @@ def add_bike():
     name_entry.grid(row=1, column=1, sticky=W)
 
     phone_label = CTkLabel(entries_frame, text="Phone : ", font=('Verdana', 14))
-    phone_label.grid(row=1, column=2, sticky=W)
+    phone_label.grid(row=1, column=2,)
 
     phone_entry = CTkEntry(entries_frame, font=('Verdana',14))
     phone_entry.grid(row=1, column=3, sticky=W)
@@ -120,7 +128,7 @@ def add_bike():
     bike_entry.grid(row=2, column=1, sticky=W)
 
     total_price_label = CTkLabel(entries_frame, text="Total : ", font=('Verdana', 14))
-    total_price_label.grid(row=2, column=2, sticky=W)
+    total_price_label.grid(row=2, column=2,)
 
     total_price_entry = CTkEntry(entries_frame, font=('Verdana',14))
     total_price_entry.grid(row=2, column=3, sticky=W)
@@ -128,14 +136,13 @@ def add_bike():
     work_label = CTkLabel(entries_frame, text="Work : ", font=('Verdana', 14))
     work_label.grid(row=3, column=0, sticky=W)
 
-    work_entry = Text(entries_frame, font=('Verdana', 14), height=3, width=51)
+    work_entry = CTkTextbox(entries_frame, font=('Verdana',14), width=work_width, height=int(work_width/3))
     work_entry.grid(row=3, column=1, columnspan=3, sticky=W)
 
-    add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('Verdana', 12, 'bold'), width=13)
-    add_but.grid(row=4, column=0, sticky=W)
+    add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('Verdana', button_width, 'bold'))
+    add_but.grid(row=4, column=0, columnspan=5, sticky=W, ipadx=int(button_width*1.4), ipady=int(button_width/2), pady=20)
 
-    clear_but = CTkButton(entries_frame, text="Clear", font=('Verdana', 12, 'bold'), width=13)
-    clear_but.grid(row=4, column=1, sticky=W)
+
 
     add_level.mainloop()
 
@@ -427,23 +434,23 @@ menu_frame.pack(side=BOTTOM,fill=X, padx=50)
 butt_padx = int(button_width)
 butt_pady = int(button_width)
 
-butt1 = CTkButton(menu_frame, text='Add', command=add_bike, font=('Verdana',  int(button_width*1.5), 'bold'))
-butt1.grid(row=0, column=0, ipady=button_width, ipadx=int(button_width*2), pady=button_width, padx=button_width)
+butt1 = CTkButton(menu_frame, text='Add', command=add_bike, font=('arial', int(button_width*3), 'bold'))
+butt1.grid(row=0, column=0, ipady=button_width, ipadx=int(button_width*3), pady=button_width, padx=button_width)
 
-butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('Verdana',  int(button_width*1.2), 'bold'))
-butt2.grid(row=0, column=1, ipady=(button_width/1.5), ipadx=button_width*2, sticky=S, pady=button_width)
+butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('arial',  int(button_width*2), 'bold'))
+butt2.grid(row=0, column=1, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt3 = CTkButton(menu_frame, text='Finished', command=fixed_ready, font=('Verdana',  int(button_width*1.2), 'bold'))
-butt3.grid(row=0, column=2, ipady=(button_width/1.5), ipadx=button_width*2, sticky=S, pady=button_width)
+butt3 = CTkButton(menu_frame, text='Ready', command=fixed_ready, font=('arial',  int(button_width*2), 'bold'))
+butt3.grid(row=0, column=2, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt4 = CTkButton(menu_frame, text='Picked Up', font=('Verdana',  int(button_width*1.2), 'bold'))
-butt4.grid(row=0, column=3, ipady=(button_width/1.5), ipadx=button_width*2, sticky=S, pady=button_width)
+butt4 = CTkButton(menu_frame, text='Picked Up', font=('arial',  int(button_width*2), 'bold'))
+butt4.grid(row=0, column=3, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt5 = CTkButton(menu_frame, text='History', font=('Verdana',  int(button_width*1.2), 'bold'))
-butt5.grid(row=0, column=4, ipady=(button_width/1.5), ipadx=button_width*2, sticky=S, pady=button_width)
+butt5 = CTkButton(menu_frame, text='History', font=('arial',  int(button_width*2), 'bold'))
+butt5.grid(row=0, column=4, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
-butt6 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('Verdana',  int(button_width*1.2), 'bold'))
-butt6.grid(row=0, column=5, ipady=(button_width/1.5), ipadx=button_width*2, sticky=S, pady=button_width)
+butt6 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('arial',  int(button_width*2), 'bold'))
+butt6.grid(row=0, column=5, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
 
 Grid.rowconfigure(menu_frame, index=0, weight=1)
 
@@ -472,7 +479,7 @@ my_tree.pack(fill='both', expand=True, padx=50)
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
 my_tree.column('#0', width=0, stretch=NO)
-my_tree.column("Ready", anchor=CENTER, width=button_width*7)
+my_tree.column("Ready", anchor=CENTER, width=button_width*8)
 my_tree.column("Name", anchor=CENTER, width=button_width*15)
 my_tree.column("Phone", anchor=CENTER, width=button_width*15)
 my_tree.column("Bike", anchor=CENTER, width=button_width*25)
@@ -489,14 +496,14 @@ my_tree.heading("ID", text="ID", anchor=CENTER)
 my_tree.heading("Date", text="Date", anchor=CENTER)
 my_tree.heading("Total", text="Total", anchor=CENTER)
 
-my_tree.tag_configure('oddrow', background= 'white')
-my_tree.tag_configure('evenrow',background='lightgrey', foreground='black')
+my_tree.tag_configure('oddrow', background= '#262626', foreground='white')
+my_tree.tag_configure('evenrow',background='#222222', foreground='white')
 
 s = ttk.Style()
-s.theme_use('default')
-s.configure('Treeview.Heading', background="#3B3355", foreground=lightgreen, font=('Verdana', int(button_width*1.5)), height=14)
-s.configure('Treeview', rowheight=int(button_width*3.5), font=('Verdana' ,13))
-
+s.theme_use('clam')
+s.configure('Treeview.Heading', background="#003f6b", foreground='white', font=('arial', int(button_width*1.3), 'bold' ), height=14, bordercolor='#303030', darkcolor="#303030" )
+s.configure('Treeview', rowheight=int(button_width*3.5), font=('Verdana' ,13), fieldbackground="#262626", bordercolor='#262626', border=0)
+s.map('Treeview', background=[('selected', '#363636')])
 # entries_buttons_and_work = Frame(my_tree_frame, background=darkpurple, width=screen_width/2, height=screen_height/2)
 # entries_buttons_and_work.pack(fill='both', expand=True)
 # entries_buttons_and_work.propagate(0)
