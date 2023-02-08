@@ -7,6 +7,7 @@ from tkinter import messagebox
 from itertools import count
 from tkinter.scrolledtext import ScrolledText
 from customtkinter import *
+from colorama import Fore, Back, Style
 
 
 darkpurple = '#3B3355'
@@ -18,18 +19,19 @@ darkgreen = '#909CC2'
 
 root = CTk()
 root.title("Bikeztube")
-root.state("zoomed")
+
 screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
+screen_height = int(root.winfo_screenheight()/1.05)
+screen_resolution = str(screen_width)+'x'+str(screen_height)
+print(screen_resolution)
+
+root.geometry(screen_resolution+'+-10+-1')
 
 set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
 set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
 
-#CREATE DATABASE TABLE or CONNECT
 conn = sqlite3.connect('bikes.db')
-#create cursor
 c = conn.cursor()
-#create table
 c.execute("""CREATE TABLE IF NOT EXISTS bikes (
     name text,
     phone text,
@@ -38,10 +40,9 @@ c.execute("""CREATE TABLE IF NOT EXISTS bikes (
     date text,
     work text,
     total text,
-    ready text
+    Ready text
 )
 """)
-
 c.execute("""CREATE TABLE IF NOT EXISTS history (
     name text,
     phone text,
@@ -52,9 +53,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS history (
     total text
 )
 """)
-#COMMIT CHANGES
 conn.commit()
-#CLOSE CONNECTION
 conn.close()
 
 def add_bike():
@@ -64,13 +63,11 @@ def add_bike():
     except:
         last=0
 
-
-
     def add_bike_to_database():
         
         conn = sqlite3.connect('bikes.db')
         c = conn.cursor()
-        c.execute("INSERT INTO bikes VALUES (:name, :phone, :bike, :id, :date , :work, :total, :ready)",
+        c.execute("INSERT INTO bikes VALUES (:name, :phone, :bike, :id, :date , :work, :total, :Ready)",
                 {
                     'name':name_entry.get(),
                     'phone':phone_entry.get(),
@@ -79,12 +76,11 @@ def add_bike():
                     'date':date_entry.get(),
                     'work':work_entry.get('1.0', END),
                     'total':'£'+total_price_entry.get(),
-                    'ready' : ''
+                    'Ready' : ''
                 })
 
         conn.commit()
         conn.close()
-
 
         add_level.destroy()
         my_tree.delete(*my_tree.get_children())
@@ -93,7 +89,6 @@ def add_bike():
     add_level = CTkToplevel(root)
     add_level.title("Add Customer")
 
-    work_width = int(screen_width/3)
     add_level.wm_transient(root)    
 
     entries_buttons_and_work = CTkFrame(add_level)
@@ -102,54 +97,47 @@ def add_bike():
     entries_frame = CTkFrame(entries_buttons_and_work)
     entries_frame.pack(padx=20, pady=20, ipadx=50)
 
-    date_label = CTkLabel(entries_frame, text="Date : ", font=('Verdana', 14))
-    date_label.grid(row=0, column=0)
+    date_label = CTkLabel(entries_frame, text="Date : ", font=('roboto', 14, 'bold'))
+    date_label.grid(row=0, column=0, sticky=W, padx=(button_width, 0))
 
     s.configure('DateEntry', fieldbackground='white')
-    date_entry = cal.DateEntry(entries_frame, date_pattern='dd/MM/yyyy', font=('Verdana', 11))
-    date_entry.grid(row=0, column=1, sticky=W)
+    date_entry = cal.DateEntry(entries_frame, date_pattern='dd/MM/yyyy', font=('roboto', 11))
+    date_entry.grid(row=0, column=1, sticky=W, pady=20)
 
-    name_label = CTkLabel(entries_frame, text="Name : ", font=('Verdana', 14))
-    name_label.grid(row=1, column=0, sticky=W)
+    name_label = CTkLabel(entries_frame, text="Name : ", font=('roboto', 14, 'bold'))
+    name_label.grid(row=1, column=0, sticky=W, padx=(button_width, 0))
 
-    name_entry = CTkEntry(entries_frame, font=('Verdana',14))
+    name_entry = CTkEntry(entries_frame, font=('roboto',14))
     name_entry.grid(row=1, column=1, sticky=W)
 
-    phone_label = CTkLabel(entries_frame, text="Phone : ", font=('Verdana', 14))
-    phone_label.grid(row=1, column=2,)
+    phone_label = CTkLabel(entries_frame, text="Phone : ", font=('roboto', 14, 'bold'))
+    phone_label.grid(row=1, column=2, padx=(button_width*1.3, 0))
 
-    phone_entry = CTkEntry(entries_frame, font=('Verdana',14))
+    phone_entry = CTkEntry(entries_frame, font=('roboto',14))
     phone_entry.grid(row=1, column=3, sticky=W)
 
-    bike_label = CTkLabel(entries_frame, text="Bike : ", font=('Verdana', 14))
-    bike_label.grid(row=2, column=0, sticky=W)
+    bike_label = CTkLabel(entries_frame, text="Bike : ", font=('roboto', 14, 'bold'))
+    bike_label.grid(row=2, column=0, sticky=W, padx=(button_width, 0))
 
-    bike_entry = CTkEntry(entries_frame, font=('Verdana',14 ))
-    bike_entry.grid(row=2, column=1, sticky=W)
+    bike_entry = CTkEntry(entries_frame, font=('roboto',14 ))
+    bike_entry.grid(row=2, column=1, sticky=W, pady=20)
 
-    total_price_label = CTkLabel(entries_frame, text="Total : ", font=('Verdana', 14))
-    total_price_label.grid(row=2, column=2,)
+    total_price_label = CTkLabel(entries_frame, text="Total : ", font=('roboto', 14, 'bold'))
+    total_price_label.grid(row=2, column=2, padx=(button_width*1.3, 0))
 
-    total_price_entry = CTkEntry(entries_frame, font=('Verdana',14))
+    total_price_entry = CTkEntry(entries_frame, font=('roboto',14))
     total_price_entry.grid(row=2, column=3, sticky=W)
 
-    work_label = CTkLabel(entries_frame, text="Work : ", font=('Verdana', 14))
-    work_label.grid(row=3, column=0, sticky=W)
+    work_label = CTkLabel(entries_frame, text="Work : ", font=('roboto', 14, 'bold'))
+    work_label.grid(row=3, column=0, sticky=NW, padx=(button_width, 0))
 
-    work_entry = CTkTextbox(entries_frame, font=('Verdana',14), width=work_width, height=int(work_width/3))
+    work_entry = CTkTextbox(entries_frame, font=('roboto',14), width=button_width*25)
     work_entry.grid(row=3, column=1, columnspan=3, sticky=W)
 
-    add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('Verdana', button_width, 'bold'))
-    add_but.grid(row=4, column=0, columnspan=5, sticky=W, ipadx=int(button_width*1.4), ipady=int(button_width/2), pady=20)
-
-
+    add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('roboto', button_width), width=button_width*7)
+    add_but.grid(row=4, column=3, sticky=E, pady=20)
 
     add_level.mainloop()
-
-
-
-
-
 
 def update_bike():
 
@@ -158,6 +146,7 @@ def update_bike():
         item_data = (my_tree.item(curItem))
         item_values = item_data['values']
         id_from_selection = str(item_values[4])
+
 
         conn = sqlite3.connect('bikes.db')
         c = conn.cursor()
@@ -183,13 +172,13 @@ def update_bike():
                     total = :total
                     WHERE oid = :oid""",
                     {
-                            'name':name_entry.get(),
-                            'phone':phone_entry.get(),
-                            'bike':bike_entry.get(),
+                            'name':name_entry1.get(),
+                            'phone':phone_entry1.get(),
+                            'bike':bike_entry1.get(),
                             'oid':id_from_selection,
-                            'date':date_entry.get(),
-                            'work':work_entry.get('1.0', END),
-                            'total':total_price_entry.get()
+                            'date':date_entry1.get(),
+                            'work':work_entry1.get('1.0', END),
+                            'total':total_price_entry1.get()
 
                     }
                 )
@@ -199,113 +188,75 @@ def update_bike():
 
                 my_tree.delete(*my_tree.get_children())
                 query_database()
+                update_level.destroy()
             else:
                 pass
 
+        def insert_entries():
+            date_entry1.set_date(item_values[5]),
+            name_entry1.insert(0, item_values[1]),
+            phone_entry1.insert(0, item_values[2]),
+            bike_entry1.insert(0, item_values[3]),
+            total_price_entry1.insert(0, item_values[6]),
+            work_entry1.insert('1.0',  work)
 
         update_level = Toplevel(root)
         update_level.title("Update")
 
-        entries_buttons_and_work = Frame(update_level, background=darkpurple)
-        entries_buttons_and_work.pack(fill='both', expand=True)
+        update_level.wm_transient(root)    
 
-        entries_and_buttons = LabelFrame(entries_buttons_and_work, text='Customer Information', background=darkpurple, foreground='white', font=('Verdana', 11))
-        entries_and_buttons.pack(fill='both', expand=True, padx=20, pady=20)
+        entries_buttons_and_work1 = CTkFrame(update_level)
+        entries_buttons_and_work1.pack(fill='both', expand=True)
 
-        entries_frame = Frame(entries_and_buttons, background=darkpurple)
-        entries_frame.pack(side=LEFT, padx=20, pady=20, anchor=W)
+        entries_frame1 = CTkFrame(entries_buttons_and_work1)
+        entries_frame1.pack(padx=20, pady=20, ipadx=50)
 
-        entries_frame_top = Frame(entries_frame, background=darkpurple)
-        entries_frame_top.pack(fill='x', expand=True)
+        date_label1 = CTkLabel(entries_frame1, text="Date : ", font=('roboto', 14, 'bold'))
+        date_label1.grid(row=0, column=0, sticky=W, padx=(button_width, 0))
 
-        date_label = Label(entries_frame_top, text="Date : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        date_label.grid(row=0, column=0)
+        date_entry1 = cal.DateEntry(entries_frame1, date_pattern='dd/MM/yyyy', font=('roboto', 11))
+        date_entry1.grid(row=0, column=1, sticky=W, pady=20)
 
-        s.configure('DateEntry', fieldbackground='white')
-        date_entry = cal.DateEntry(entries_frame_top, width=23, date_pattern='dd/MM/yyyy', font=('Verdana', 11), background='white')
-        date_entry.grid(row=0, column=1, padx=(6,36), ipady=3)
+        name_label1 = CTkLabel(entries_frame1, text="Name : ", font=('roboto', 14, 'bold'))
+        name_label1.grid(row=1, column=0, sticky=W, padx=(button_width, 0))
 
-        id_label = Label(entries_frame_top, text="ID : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        id_label.grid(row=0, column=2)
+        name_entry1 = CTkEntry(entries_frame1, font=('roboto',14))
+        name_entry1.grid(row=1, column=1, sticky=W)
 
-        id_entry = Entry(entries_frame_top, font=('Verdana', 14), width=20, background='white')
-        id_entry.grid(row=0, column=3, padx=(44,0), ipady=3)
+        phone_label1 = CTkLabel(entries_frame1, text="Phone : ", font=('roboto', 14, 'bold'))
+        phone_label1.grid(row=1, column=2, padx=(button_width*1.3, 0))
 
-        entries_frame_middle = Frame(entries_frame, background=darkpurple)
-        entries_frame_middle.pack(fill='x', expand=True)
+        phone_entry1 = CTkEntry(entries_frame1, font=('roboto',14))
+        phone_entry1.grid(row=1, column=3, sticky=W)
 
-        name_label = Label(entries_frame_middle, text="Name : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        name_label.grid(row=0, column=0)
+        bike_label1 = CTkLabel(entries_frame1, text="Bike : ", font=('roboto', 14, 'bold'))
+        bike_label1.grid(row=2, column=0, sticky=W, padx=(button_width, 0))
 
-        name_entry = Entry(entries_frame_middle, font=('Verdana',14), width=20, background='white')
-        name_entry.grid(row=0, column=1, pady=20, ipady=3)
+        bike_entry1 = CTkEntry(entries_frame1, font=('roboto',14 ))
+        bike_entry1.grid(row=2, column=1, sticky=W, pady=20)
 
-        phone_label = Label(entries_frame_middle, text="Phone : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        phone_label.grid(row=0, column=2, padx=(30,10))
+        total_price_label1 = CTkLabel(entries_frame1, text="Total : ", font=('roboto', 14, 'bold'))
+        total_price_label1.grid(row=2, column=2, padx=(button_width*1.3, 0))
 
-        phone_entry = Entry(entries_frame_middle, font=('Verdana',14), width=20, background='white')
-        phone_entry.grid(row=0, column=3, ipady=3, padx=(5,0))
+        total_price_entry1 = CTkEntry(entries_frame1, font=('roboto',14))
+        total_price_entry1.grid(row=2, column=3, sticky=W)
 
-        entries_frame_bottom = Frame(entries_frame, background=darkpurple)
-        entries_frame_bottom.pack(fill='x', expand=True)
+        work_label1 = CTkLabel(entries_frame1, text="Work : ", font=('roboto', 14, 'bold'))
+        work_label1.grid(row=3, column=0, sticky=NW, padx=(button_width, 0))
 
-        bike_label = Label(entries_frame_bottom, text="Bike : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        bike_label.grid(row=0, column=0)
+        work_entry1 = CTkTextbox(entries_frame1, font=('roboto',14), width=button_width*25)
+        work_entry1.grid(row=3, column=1, columnspan=3, sticky=W)
 
-        bike_entry = Entry(entries_frame_bottom, font=('Verdana',14 ), width=20, background='white')
-        bike_entry.grid(row=0, column=1, padx=(13,0), ipady=3)
+        update_but1 = CTkButton(entries_frame1, text="Update", command=update_bike_in_database, font=('roboto', button_width), width=button_width*7)
+        update_but1.grid(row=4, column=3, sticky=E, pady=20)
 
-        total_price_label = Label(entries_frame_bottom, text="Total : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        total_price_label.grid(row=0, column=2, padx=(30,10))
-
-        total_price_entry = Entry(entries_frame_bottom, font=('Verdana',14), width=20, background='white')
-        total_price_entry.grid(row=0, column=3, padx=(14,0), ipady=3)
-
-        entries_frame_bottom_work = Frame(entries_frame, background=darkpurple)
-        entries_frame_bottom_work.pack(fill='x', expand=True, pady=20)
-
-        work_label = Label(entries_frame_bottom_work, text="Work : ", font=('Verdana', 14), background=darkpurple, foreground='white')
-        work_label.pack(side=LEFT)
-
-        work_entry = Text(entries_frame_bottom_work, font=('Verdana', 14), height=3, width=51, background='white')
-        work_entry.pack(padx=(5, 50), side=LEFT)
-
-        entries_frame_bottom_clear = Frame(entries_frame, background=darkpurple)
-        entries_frame_bottom_clear.pack(side=LEFT,anchor=W, pady=20)
-
-        update_but = Button(entries_frame_bottom_clear, text="Update", command=update_bike_in_database, background='purple', foreground='white', font=('Verdana', 12, 'bold'), width=13)
-        update_but.pack(side=LEFT,anchor=W)
-
-        clear_but = Button(entries_frame_bottom_clear, text="Clear", background='purple', foreground='white', font=('Verdana', 12, 'bold'), width=13)
-        clear_but.pack(side=LEFT, anchor=W, padx=20)
-
-
-        name_entry.insert(0, item_values[1]),
-        phone_entry.insert(0, item_values[2]),
-        bike_entry.insert(0, item_values[3]),
-        id_entry.insert(0, item_values[4]),
-        date_entry.insert(item_values[5]),
-        work_entry.insert('1.0',  work),
-        total_price_entry.insert(0, item_values[6])
+        insert_entries()
 
         update_level.mainloop()
 
+
     except:
         pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def query_database():
 
@@ -350,8 +301,7 @@ def delete_bike():
     else:
         pass
 
-
-def fixed_ready():
+def fixed():
 
     try :
         curItem = my_tree.focus()
@@ -376,9 +326,7 @@ def fixed_ready():
                 WHERE oid = :oid""",
                 {
                         'ready':'✓',
-                        'oid':id_from_selection,
-
-                }
+                        'oid':id_from_selection,}
             )
 
             conn.commit()
@@ -406,21 +354,62 @@ def fixed_ready():
     except:
         pass
 
+def change_appearance_mode_event(new_appearance_mode: str):
 
+    set_appearance_mode(new_appearance_mode)
 
+    if new_appearance_mode == "Light":
+        s.configure('Treeview.Heading', background="#ffffff", foreground='#555555', )
+        s.configure('Treeview', fieldbackground="white")
+        s.map('Treeview', background=[('selected', '#55bd7f')], foreground=[('selected', 'white')])
+        my_tree.tag_configure('oddrow', background= '#cccccc', foreground='#121212')
+        my_tree.tag_configure('evenrow',background='#dddddd', foreground='#121212')
 
+    if new_appearance_mode == "Dark":
+        s.configure('Treeview.Heading', background="#181818", foreground='white', )
+        s.configure('Treeview', rowheight=int(button_width*3.5), fieldbackground="#363636")
+        s.map('Treeview', background=[('selected', '#319f6d')])
+        my_tree.tag_configure('oddrow', background= '#363636', foreground='white')
+        my_tree.tag_configure('evenrow',background='#303030', foreground='white')
 
+def fixed_bike():
 
+    MsgBox = messagebox.askquestion ('Delete bike','Are you sure?')
+    if MsgBox == 'yes':
+        curItem = my_tree.focus()
+        item_data = (my_tree.item(curItem))
+        item_values = item_data['values']
+        id_from_selection = str(item_values[4])
 
+        conn = sqlite3.connect('bikes.db')
+        c = conn.cursor()
+        c.execute('SELECT * FROM bikes WHERE rowid=' +id_from_selection )
+        records = c.fetchall()
+        records_list = records[0]
+        conn.commit()
+        conn.close()
 
+        x = my_tree.selection()[0]
+        my_tree.delete(x)
 
+        conn = sqlite3.connect('bikes.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO history VALUES (:name, :phone, :bike, :id, :date, :work, :total)",
+                {
+                    'name':records_list[0],
+                    'phone':records_list[1],
+                    'bike':records_list[2],
+                    'id':id_from_selection,
+                    'date':records_list[4],
+                    'work':records_list[5],
+                    'total':records_list[6]
 
+                })
+        c.execute("DELETE from bikes WHERE oid=" + id_from_selection)
+        conn.commit()
+        conn.close()
 
-
-
-
-
-
+        messagebox.showinfo("Done!", "Service Record Saved !")
 
 menu_width = (screen_width/9)
 button_width = int(menu_width/14)
@@ -428,71 +417,57 @@ button_width = int(menu_width/14)
 main_frame = CTkFrame(root)
 main_frame.pack(fill=BOTH, expand=1)
 
-menu_frame = CTkFrame(main_frame, width=menu_width)
-menu_frame.pack(side=BOTTOM,fill=X, padx=button_width*3, pady=button_width*3)
-
-print(button_width)
+menu_frame = CTkFrame(main_frame, width=menu_width*1.2)
+menu_frame.pack(side=LEFT,fill=Y)
+menu_frame.propagate(0)
 
 butt_padx = int(button_width)
 butt_pady = int(button_width)
 
-butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('arial', int(button_width*3), 'bold'))
-butt1.grid(row=0, column=0, ipady=button_width, ipadx=int(button_width*3), pady=button_width, padx=button_width)
+title_label = CTkLabel(menu_frame, text="Workshop Manager", font=('roboto', button_width*1.5))
+title_label.pack(pady=(int(button_width*3),int(button_width*1.5)),  padx=button_width*2 ,fill='x')
 
-butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('arial',  int(button_width*2)))
-butt2.grid(row=0, column=1, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
+butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('roboto', int(button_width*1.1)))
+butt1.pack(ipady=int(button_width/2), pady=(int(button_width*2), 0), padx=button_width*2 ,fill='x')
 
-butt3 = CTkButton(menu_frame, text='Ready', command=fixed_ready, font=('arial',  int(button_width*2)))
-butt3.grid(row=0, column=2, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
+butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('roboto',  int(button_width*1.1)))
+butt2.pack(pady=button_width, ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
-butt4 = CTkButton(menu_frame, text='Picked Up', font=('arial',  int(button_width*2)))
-butt4.grid(row=0, column=3, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
+butt3 = CTkButton(menu_frame, text='Ready', command=fixed, font=('roboto',  int(button_width*1.1)))
+butt3.pack(ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
-butt5 = CTkButton(menu_frame, text='History', font=('arial',  int(button_width*2)))
-butt5.grid(row=0, column=4, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
+butt4 = CTkButton(menu_frame, text='Collected', command=fixed_bike, font=('roboto',  int(button_width*1.1)))
+butt4.pack(pady=button_width, ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
-butt6 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('arial',  int(button_width*2)))
-butt6.grid(row=0, column=5, ipady=(button_width/2), ipadx=button_width*2, sticky=S, pady=button_width)
+butt5 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('roboto',  int(button_width*1.1)))
+butt5.pack( ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
-Grid.rowconfigure(menu_frame, index=0, weight=1)
+appearance_mode_optionemenu = CTkOptionMenu(menu_frame, values=["Dark", "Light"], command=change_appearance_mode_event)
+appearance_mode_optionemenu.pack(side=BOTTOM, pady=(0,40))
 
-
-button_list = [ butt1, butt2, butt3, butt4, butt5, butt6,]
-
-column_number = 0
-
-for button in button_list:
-    Grid.columnconfigure(menu_frame, column_number, weight=1)
-    column_number += 1
-
-
-# appearance_frame = CTkFrame(main_frame)
-# appearance_frame.pack(side=TOP)
-
-def change_appearance_mode_event(new_appearance_mode: str):
-    set_appearance_mode(new_appearance_mode)
-
-
-appearance_mode_label = CTkLabel(main_frame, text="Appearance Mode:", anchor="w")
-appearance_mode_label.pack(side=TOP, anchor=NE, padx=button_width*2)
-
-appearance_mode_optionemenu = CTkOptionMenu(main_frame, values=["Dark", "Light"], command=change_appearance_mode_event)
-appearance_mode_optionemenu.pack(side=TOP, anchor=NE, padx=button_width*2)
-
-
-
+appearance_mode_label = CTkLabel(menu_frame, text="Appearance Mode:", anchor="w")
+appearance_mode_label.pack(side=BOTTOM)
 
 content_frame = CTkFrame(main_frame)
-content_frame.pack(side=TOP, fill=BOTH, expand=1, pady=button_width*3, padx=button_width*3)
+content_frame.pack(side=RIGHT, fill=BOTH, expand=1, pady=button_width*3, padx=button_width*3)
 
+tree_and_bar_frame = CTkFrame(content_frame)
+tree_and_bar_frame.pack( expand=True, fill='both')
 
-
-
-my_tree_frame = CTkFrame(content_frame)
-my_tree_frame.pack( side=LEFT, expand=True, fill='both')
+my_tree_frame = CTkFrame(tree_and_bar_frame)
+my_tree_frame.pack( expand=True, fill='both')
 
 my_tree = ttk.Treeview(my_tree_frame, selectmode='extended')
 my_tree.pack(fill='both', expand=True)
+
+bar_and_label_frame = CTkFrame(tree_and_bar_frame)
+bar_and_label_frame.pack( fill='x', anchor=N, pady=(button_width*1.5, 0))
+
+bar_label = CTkLabel(bar_and_label_frame, text='Service capacity : ', font=('roboto', button_width, 'bold'))
+bar_label.pack(side=LEFT, pady=(button_width), padx=(button_width,0 ), anchor=N)
+
+progressbar = CTkProgressBar(master=bar_and_label_frame)
+progressbar.pack(fill='x', expand=1, side=LEFT,  pady=(button_width*1.7, 0), padx=(button_width), anchor=N )
 
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
@@ -514,37 +489,46 @@ my_tree.heading("ID", text="ID", anchor=CENTER)
 my_tree.heading("Date", text="Date", anchor=CENTER)
 my_tree.heading("Total", text="Total", anchor=CENTER)
 
-my_tree.tag_configure('oddrow', background= '#262626', foreground='white')
-my_tree.tag_configure('evenrow',background='#222222', foreground='white')
+my_tree.tag_configure('oddrow', background= '#363636', foreground='white')
+my_tree.tag_configure('evenrow',background='#303030', foreground='white')
 
 s = ttk.Style()
-s.theme_use('clam')
-s.configure('Treeview.Heading', background="#003f6b", foreground='white', font=('arial', int(button_width*1.3), 'bold' ), height=14, bordercolor='#303030', darkcolor="#303030" )
-s.configure('Treeview', rowheight=int(button_width*3.5), font=('Verdana' ,13), fieldbackground="#262626", bordercolor='#262626', border=0)
-s.map('Treeview', background=[('selected', '#363636')])
-# entries_buttons_and_work = Frame(my_tree_frame, background=darkpurple, width=screen_width/2, height=screen_height/2)
-# entries_buttons_and_work.pack(fill='both', expand=True)
-# entries_buttons_and_work.propagate(0)
+s.theme_use('classic')
 
-# entries_and_buttons = LabelFrame(entries_buttons_and_work, text='Service Details', background=darkpurple, foreground='white', font=('Verdana', 11))
-# entries_and_buttons.pack(fill='both', expand=True, padx=20, pady=20)
+s.configure('Treeview.Heading', background="#181818", foreground='white', font=('roboto', int(button_width*1.3), 'bold' ), height=14, borderwidth=0 )
+s.configure('Treeview', rowheight=int(button_width*3.5), font=('roboto' ,button_width ), fieldbackground="#363636", bordercolor='#262626')
+s.map('Treeview', background=[('selected', '#319f6d')])
 
+more_butt_frame = CTkFrame(content_frame)
+more_butt_frame.pack(fill='x',  side=BOTTOM)
 
-# work_entry = Label(entries_and_buttons, font=('Verdana', 14), background='white')
-# work_entry.pack(padx=(button_width*2), pady=button_width*2, side=BOTTOM, fill='both', expand=True)
+details_and_label_frame = CTkFrame(more_butt_frame)
+details_and_label_frame.pack(anchor=W,side=LEFT, fill='x', expand=1, pady=(button_width*1.5), padx=(0, button_width*1.5))
 
+service_details_label = CTkLabel(details_and_label_frame, height=button_width*6.3, wraplength=button_width*50, justify=LEFT, text='Commue, Front e PFront Geear Wire', font=('roboto', button_width))
+service_details_label.pack(anchor=W, pady=button_width, padx= button_width*1.5)
+
+stat_frame = CTkFrame(more_butt_frame)
+stat_frame.pack(side=RIGHT, pady=button_width*1.5, anchor=N)
+
+checkbuttons_frame = CTkFrame(stat_frame)
+checkbuttons_frame.pack(pady=button_width, padx=(button_width*1.5))
+
+checkbox_1 = CTkCheckBox(master=checkbuttons_frame, text='Basic Service')
+checkbox_1.pack(pady=button_width, padx=(button_width*2, 0), side=LEFT)
+
+checkbox_2 = CTkCheckBox(master=checkbuttons_frame, text='Commuter Service')
+checkbox_2.pack(pady=button_width, padx=(button_width, 0), side=LEFT)
+
+checkbox_3 = CTkCheckBox(master=checkbuttons_frame, text='Full Service', )
+checkbox_3.pack(pady=button_width, padx=(button_width), side=LEFT)
+
+graph_butt = CTkButton(stat_frame, text='Statistics', font=('roboto',  int(button_width*1.1)))
+graph_butt.pack(pady=(0, button_width), padx=( button_width*1.5), side=LEFT, fill='x', expand=1)
+
+hist_butt = CTkButton(stat_frame, text='History', font=('roboto',  int(button_width*1.1)))
+hist_butt.pack(pady=(0, button_width,), padx=(0, button_width*1.5), side=RIGHT, fill='x', expand=1)
 
 query_database()
-
-
-
-
-
-
-
-
-
-
-
 
 root.mainloop()
