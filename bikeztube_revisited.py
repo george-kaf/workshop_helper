@@ -17,6 +17,7 @@ darkgreen = '#909CC2'
 
 root = CTk()
 root.title("Bikeztube")
+root.state('zoomed') 
 
 screen_width = root.winfo_screenwidth()
 screen_height = int(root.winfo_screenheight()/1.05)
@@ -25,7 +26,6 @@ screen_height = int(root.winfo_screenheight()/1.05)
 
 # root.geometry(screen_resolution+'+-10+-1')
 
-root.attributes('-fullscreen')
 
 set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
 set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -394,7 +394,12 @@ def get_history():
 
         for l in s_results:
             global count
-            my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(l[0], str(l[1]), l[2], l[3], l[4], l[5], l[6]))
+          
+            if count % 2 == 0:
+                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(l[0], str(l[1]), l[2], l[3], l[4], l[5], l[6]), tags=('evenrow',))
+            else:
+                my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(l[0], str(l[1]), l[2], l[3], l[4], l[5], l[6]), tags=('oddrow',))
+
             count +=1
    
 
@@ -415,22 +420,21 @@ def get_history():
                 my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('evenrow',))
             else:
                 my_hist_tree.insert(parent='', index='end', iid=count, text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('oddrow',))
-            #increment counter
+            
             count +=1
-
         conn.commit()
         conn.close() 
 
 
     hist_frame = CTkFrame(his)
-    hist_frame.pack(fill='both', expand=True, pady=button_width*2, padx=button_width*2)
+    hist_frame.pack(fill='both', expand=True)
 
     my_hist_tree_frame = CTkFrame(hist_frame)
-    my_hist_tree_frame.pack(pady=(button_width*2, button_width*4), padx=button_width*2, side=LEFT, expand=True, fill='both')
+    my_hist_tree_frame.pack(fill='both', expand=True,side=LEFT, pady=int(screen_height/8), padx=(button_width*2, 0))
 
-    buttons_hist_frame = CTkFrame(hist_frame, width=int(screen_width/2))
-    buttons_hist_frame.pack(side=RIGHT, fill='both', expand=1, pady=(0, button_width))
-    buttons_hist_frame.propagate(0)
+    buttons_hist_frame = CTkFrame(hist_frame)
+    buttons_hist_frame.pack(side=RIGHT)
+ 
 
     my_hist_tree = ttk.Treeview(my_hist_tree_frame, selectmode='extended')
     my_hist_tree.pack(fill='both', expand=True, pady=(button_width*2), padx=button_width*2)
@@ -438,13 +442,13 @@ def get_history():
     my_hist_tree['columns'] = ('Name', 'Phone', 'Bike', 'ID', 'Date', 'Work', 'Total')
 
     my_hist_tree.column('#0', width=0, stretch=NO)
-    my_hist_tree.column("Name", anchor=CENTER, width=120)
-    my_hist_tree.column("Phone", anchor=CENTER, width=120)
-    my_hist_tree.column("Bike", anchor=CENTER, width=200)
-    my_hist_tree.column("ID", anchor=CENTER, width=90)
-    my_hist_tree.column("Date", anchor=CENTER, width=110)
-    my_hist_tree.column("Work", anchor=CENTER, width=300)
-    my_hist_tree.column("Total", anchor=CENTER, width=80)
+    my_hist_tree.column("Name", anchor=CENTER)
+    my_hist_tree.column("Phone", anchor=CENTER)
+    my_hist_tree.column("Bike", anchor=CENTER)
+    my_hist_tree.column("ID", anchor=CENTER, width=button_width*2)
+    my_hist_tree.column("Date", anchor=CENTER)
+    my_hist_tree.column("Work", anchor=CENTER)
+    my_hist_tree.column("Total", anchor=CENTER)
 
     my_hist_tree.heading("#0", text="", anchor=CENTER)
     my_hist_tree.heading("Name", text="Name", anchor=CENTER)
@@ -455,14 +459,14 @@ def get_history():
     my_hist_tree.heading("Work", text="Work", anchor=CENTER)
     my_hist_tree.heading("Total", text="Total", anchor=CENTER)
 
-    my_hist_tree.tag_configure('oddrow', background= '#319f6d', foreground='#ffffff')
-    my_hist_tree.tag_configure('evenrow',background='#288058', foreground='#ffffff')
+    my_hist_tree.tag_configure('oddrow', background= '#236C4B', foreground='#ffffff')
+    my_hist_tree.tag_configure('evenrow',background='#1D5F41', foreground='#ffffff')
 
     entries_frame = CTkFrame(buttons_hist_frame)
     entries_frame.pack(fill='y', expand=1)
 
     search_frame = CTkFrame(entries_frame)
-    search_frame.pack(fill='x', expand=1, padx=button_width*2, pady=button_width)
+    search_frame.pack(fill='x', expand=1, padx=button_width*2, pady=(0, button_width))
 
     searchbox_label = CTkLabel(search_frame, text='Search :  ', justify=CENTER)
     searchbox_label.pack(side=LEFT, padx=(button_width*2,0), pady=(button_width*2))
@@ -482,44 +486,44 @@ def get_history():
     entries_frame2 = CTkFrame(entries_frame)
     entries_frame2.pack(fill='both', expand=1, padx=button_width*2)
 
-    date_entry2 = cal.DateEntry(entries_frame2, width=button_width*3, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width*1.5)))
-    date_entry2.pack(fill='x', expand=1, padx=button_width*2)
+    date_entry2 = cal.DateEntry(entries_frame2, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width)))
+    date_entry2.pack(fill='x', expand=1, padx=button_width*2, pady=(button_width*2))
 
     id_label2 = CTkLabel(entries_frame2, text="ID (Always Leave Empty!)")
     id_label2.pack()
 
     id_entry2 = CTkEntry(entries_frame2)
-    id_entry2.pack()
+    id_entry2.pack(fill='x', expand=1, padx=button_width*2)
 
     name_label2 = CTkLabel(entries_frame2, text="Name")
     name_label2.pack()
 
     name_entry2 = CTkEntry(entries_frame2)
-    name_entry2.pack()
+    name_entry2.pack(fill='x', expand=1, padx=button_width*2)
 
     phone_label2 = CTkLabel(entries_frame2, text="Phone")
     phone_label2.pack()
 
     phone_entry2 = CTkEntry(entries_frame2)
-    phone_entry2.pack()
+    phone_entry2.pack(fill='x', expand=1, padx=button_width*2)
 
     bike_label2 = CTkLabel(entries_frame2, text="Bike")
     bike_label2.pack()
 
     bike_entry2 = CTkEntry(entries_frame2)
-    bike_entry2.pack()
-
-    work_label2 = CTkLabel(entries_frame2, text="Work")
-    work_label2.pack()
-
-    work_entry2 = CTkTextbox(entries_frame2, height=3)
-    work_entry2.pack()
+    bike_entry2.pack(fill='x', expand=1, padx=button_width*2)
 
     total_price_label2 = CTkLabel(entries_frame2, text="Total")
     total_price_label2.pack()
 
     total_price_entry2 = CTkEntry(entries_frame2)
-    total_price_entry2.pack()
+    total_price_entry2.pack(fill='x', expand=1, padx=button_width*2)
+
+    work_label2 = CTkLabel(entries_frame2, text="Work")
+    work_label2.pack()
+
+    work_entry2 = CTkTextbox(entries_frame2, height=int(screen_height/13))
+    work_entry2.pack(fill='x', padx=button_width*2, pady=(0, button_width*2))
 
     buttons_hist = CTkFrame(entries_frame)
     buttons_hist.pack(fill='x', expand=1, padx=button_width*2, pady=button_width*2)
@@ -769,13 +773,13 @@ my_tree = ttk.Treeview(my_tree_frame, selectmode='extended')
 my_tree.pack(fill='both', expand=True)
 
 bar_and_label_frame = CTkFrame(tree_and_bar_frame)
-bar_and_label_frame.pack( fill='both',expand=1 )
+bar_and_label_frame.pack( fill='x' )
 
 bar_label = CTkLabel(bar_and_label_frame, text='Shop capacity : ', font=('roboto', button_width, 'bold'))
-bar_label.pack(side=LEFT, padx=(button_width,0 ), anchor=N, fill='both', expand=1)
+bar_label.pack(side=LEFT, padx=(button_width,0 ), pady=(button_width))
 
 progressbar = CTkProgressBar(master=bar_and_label_frame)
-progressbar.pack(fill='x', expand=1, side=LEFT,  pady=(button_width*1.7, 0), padx=(button_width), anchor=N )
+progressbar.pack(side=LEFT,  pady=(button_width), padx=(button_width) )
 
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
