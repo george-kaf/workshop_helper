@@ -7,8 +7,6 @@ from tkinter import messagebox
 from itertools import count
 from tkinter.scrolledtext import ScrolledText
 from customtkinter import *
-from colorama import Fore, Back, Style
-
 
 darkpurple = '#3B3355'
 mediumpurple = '#5D5D81'   
@@ -430,8 +428,9 @@ def get_history():
     my_hist_tree_frame = CTkFrame(hist_frame)
     my_hist_tree_frame.pack(pady=(button_width*2, button_width*4), padx=button_width*2, side=LEFT, expand=True, fill='both')
 
-    buttons_hist_frame = CTkFrame(hist_frame)
-    buttons_hist_frame.pack(side=RIGHT, fill='y', expand=1, pady=(0, button_width))
+    buttons_hist_frame = CTkFrame(hist_frame, width=int(screen_width/2))
+    buttons_hist_frame.pack(side=RIGHT, fill='both', expand=1, pady=(0, button_width))
+    buttons_hist_frame.propagate(0)
 
     my_hist_tree = ttk.Treeview(my_hist_tree_frame, selectmode='extended')
     my_hist_tree.pack(fill='both', expand=True, pady=(button_width*2), padx=button_width*2)
@@ -770,10 +769,10 @@ my_tree = ttk.Treeview(my_tree_frame, selectmode='extended')
 my_tree.pack(fill='both', expand=True)
 
 bar_and_label_frame = CTkFrame(tree_and_bar_frame)
-bar_and_label_frame.pack( fill='x', anchor=N, pady=(button_width*1.5, 0))
+bar_and_label_frame.pack( fill='both',expand=1 )
 
 bar_label = CTkLabel(bar_and_label_frame, text='Shop capacity : ', font=('roboto', button_width, 'bold'))
-bar_label.pack(side=LEFT, pady=(button_width), padx=(button_width,0 ), anchor=N)
+bar_label.pack(side=LEFT, padx=(button_width,0 ), anchor=N, fill='both', expand=1)
 
 progressbar = CTkProgressBar(master=bar_and_label_frame)
 progressbar.pack(fill='x', expand=1, side=LEFT,  pady=(button_width*1.7, 0), padx=(button_width), anchor=N )
@@ -781,11 +780,11 @@ progressbar.pack(fill='x', expand=1, side=LEFT,  pady=(button_width*1.7, 0), pad
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
 my_tree.column('#0', width=0, stretch=NO)
-my_tree.column("Ready", anchor=CENTER, width=button_width*8)
-my_tree.column("Name", anchor=CENTER, width=button_width*15)
-my_tree.column("Phone", anchor=CENTER, width=button_width*15)
-my_tree.column("Bike", anchor=CENTER, width=button_width*25)
-my_tree.column("ID", anchor=CENTER)
+my_tree.column("Ready", anchor=CENTER, width=button_width*4)
+my_tree.column("Name", anchor=CENTER)
+my_tree.column("Phone", anchor=CENTER)
+my_tree.column("Bike", anchor=CENTER)
+my_tree.column("ID", anchor=CENTER, width=button_width)
 my_tree.column("Date", anchor=CENTER)
 my_tree.column("Total", anchor=CENTER)
 
@@ -805,7 +804,7 @@ s = ttk.Style()
 s.theme_use('classic')
 
 s.configure('Treeview.Heading', background="#181818", foreground='white', font=('roboto', int(button_width*1.3), 'bold' ), height=14, borderwidth=0 )
-s.configure('Treeview', rowheight=int(button_width*6), font=('roboto' ,button_width*2 ), fieldbackground="#363636", bordercolor='#262626')
+s.configure('Treeview', rowheight=int(button_width*3), font=('roboto' , int(button_width*1.5) ), fieldbackground="#363636", bordercolor='#262626')
 s.map('Treeview', background=[('selected', '#319f6d')])
 
 more_butt_frame = CTkFrame(content_frame)
