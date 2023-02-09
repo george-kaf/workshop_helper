@@ -542,7 +542,7 @@ def get_history():
     my_hist_tree.tag_configure('evenrow',background='#1D5F41', foreground='#ffffff')
 
     entries_frame = CTkFrame(buttons_hist_frame)
-    entries_frame.pack(fill='y', expand=1)
+    entries_frame.pack(fill='y', expand=1, pady=button_width)
 
     search_frame = CTkFrame(entries_frame)
     search_frame.pack(fill='x', expand=1, padx=button_width*2, pady=(0, button_width))
@@ -565,44 +565,66 @@ def get_history():
     entries_frame2 = CTkFrame(entries_frame)
     entries_frame2.pack(fill='both', expand=1, padx=button_width*2)
 
-    date_entry2 = cal.DateEntry(entries_frame2, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width)))
+    date_entry2 = cal.DateEntry(entries_frame2, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width*1.5)))
     date_entry2.pack(fill='x', expand=1, padx=button_width*2, pady=(button_width*2))
 
-    id_label2 = CTkLabel(entries_frame2, text="ID (NEVER CHANGE)")
-    id_label2.pack()
 
-    id_entry2 = CTkEntry(entries_frame2)
-    id_entry2.pack(fill='x', expand=1, padx=button_width*2)
+    entries_and_labels_frame = CTkFrame(entries_frame2, corner_radius=0)
+    entries_and_labels_frame.pack(fill='both', expand=1)
 
-    name_label2 = CTkLabel(entries_frame2, text="Name")
-    name_label2.pack()
+    labels_frame = CTkFrame(entries_and_labels_frame, corner_radius=0)
+    labels_frame.pack(side=LEFT, fill='both', expand=1, anchor=E)
 
-    name_entry2 = CTkEntry(entries_frame2)
-    name_entry2.pack(fill='x', expand=1, padx=button_width*2)
+    entries_frame3 = CTkFrame(entries_and_labels_frame, corner_radius=0)
+    entries_frame3.pack(side=RIGHT, fill='both', expand=1, anchor=W)
 
-    phone_label2 = CTkLabel(entries_frame2, text="Phone")
-    phone_label2.pack()
 
-    phone_entry2 = CTkEntry(entries_frame2)
-    phone_entry2.pack(fill='x', expand=1, padx=button_width*2)
 
-    bike_label2 = CTkLabel(entries_frame2, text="Bike")
-    bike_label2.pack()
+    id_label2 = CTkLabel(labels_frame, text="ID :  ")
+    id_label2.pack(anchor=E)
 
-    bike_entry2 = CTkEntry(entries_frame2)
-    bike_entry2.pack(fill='x', expand=1, padx=button_width*2)
+    name_label2 = CTkLabel(labels_frame, text="Name :  ")
+    name_label2.pack(anchor=E, pady=button_width)
 
-    total_price_label2 = CTkLabel(entries_frame2, text="Total")
-    total_price_label2.pack()
+    phone_label2 = CTkLabel(labels_frame, text="Phone :  ")
+    phone_label2.pack(anchor=E)
 
-    total_price_entry2 = CTkEntry(entries_frame2)
-    total_price_entry2.pack(fill='x', expand=1, padx=button_width*2)
+    bike_label2 = CTkLabel(labels_frame, text="Bike :  ")
+    bike_label2.pack(anchor=E, pady=button_width)
 
-    work_label2 = CTkLabel(entries_frame2, text="Work")
-    work_label2.pack()
+    total_price_label2 = CTkLabel(labels_frame, text="Total :  ")
+    total_price_label2.pack(anchor=E)
 
-    work_entry2 = CTkTextbox(entries_frame2, height=int(screen_height/13))
-    work_entry2.pack(fill='x', padx=button_width*2, pady=(0, button_width*2))
+    work_label2 = CTkLabel(labels_frame, text="Work :  ")
+    work_label2.pack(anchor=E, pady=button_width)
+
+
+    
+
+
+    id_entry2 = CTkEntry(entries_frame3)
+    id_entry2.pack(fill='x', expand=1, padx=(button_width, int(button_width*2)))
+
+
+    name_entry2 = CTkEntry(entries_frame3)
+    name_entry2.pack(fill='x', expand=1, padx=(button_width, int(button_width*2)), pady=button_width)
+
+
+    phone_entry2 = CTkEntry(entries_frame3)
+    phone_entry2.pack(fill='x', expand=1, padx=(button_width, int(button_width*2)))
+
+
+    bike_entry2 = CTkEntry(entries_frame3)
+    bike_entry2.pack(fill='x', expand=1, padx=(button_width, int(button_width*2)), pady=button_width)
+
+
+    total_price_entry2 = CTkEntry(entries_frame3)
+    total_price_entry2.pack(fill='x', expand=1, padx=(button_width, int(button_width*2)))
+
+    work_entry2 = CTkTextbox(entries_frame3, height=int(screen_height/13))
+    work_entry2.pack( fill='x', expand=1, padx=(button_width, int(button_width*2)), pady=button_width)
+
+
 
 
     buttons_hist = CTkFrame(entries_frame)
@@ -801,7 +823,42 @@ def select_record(e):
     except:
         pass  
 
+def change_scaling_event(new_scaling: str):
+    
+    global button_width
 
+    
+    #slide_int = int(slide.replace(".0", ""))
+    print(new_scaling)   
+
+    if new_scaling < 0.6 :
+
+
+
+        global button_width
+        button_width2 = button_width
+        new_scaling_float = 0.9
+        set_widget_scaling(new_scaling_float)
+        s=ttk.Style()
+        s.configure('Treeview.Heading', font=('roboto', int(button_width2*1.3), 'bold' ), borderwidth=0 )
+        s.configure('Treeview', rowheight= int(button_width2*4) , font=('roboto' , int(button_width2*1.7)))
+
+
+    if new_scaling > 1.6:        
+        button_width3 = button_width
+        new_scaling_float = 1.1
+        set_widget_scaling(new_scaling_float)
+        s=ttk.Style()
+        s.configure('Treeview.Heading', font=('roboto', int(button_width3*2), 'bold' ), borderwidth=0 )
+        s.configure('Treeview', rowheight= int(button_width3*5) , font=('roboto' , int(button_width3*2.5)))
+
+    if new_scaling > 0.7 and new_scaling <  1.5:
+
+        new_scaling_float = 1
+        set_widget_scaling(new_scaling_float)
+        s=ttk.Style()
+        s.configure('Treeview.Heading',  font=('roboto', int(button_width*1.5), 'bold' ), borderwidth=0 )
+        s.configure('Treeview', rowheight=int(button_width*5), font=('roboto' , int(button_width*2) ))
 
 menu_width = (screen_width/9)
 button_width = int(menu_width/14)
@@ -834,11 +891,44 @@ butt4.pack(pady=button_width, ipady=int(button_width/2), padx=button_width*2 ,fi
 butt6 = CTkButton(menu_frame, text='Due Today', font=('roboto',  int(button_width*1.2), 'bold'))
 butt6.pack(ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
+
+def slide(sl :str):
+
+    ppp = StringVar()
+    ppp.set(sl)
+
+    slide = ppp.get()
+    slide_int = int(slide.replace(".0", ""))
+    print(slide_int)
+
+slider_1 = CTkSlider(menu_frame, from_=0, to=2, command=change_scaling_event)
+slider_1.pack(side=BOTTOM, pady=button_width, padx=button_width*2 ,fill='x')
+slider_1.set(1)
+
+
+
+
+
+
+
+
+
+
+# optionmenu_1 = CTkOptionMenu(menu_frame, values=["Small", "Standard", "Large"],  command=change_scaling_event)
+# optionmenu_1.pack(side=BOTTOM, pady=button_width, padx=button_width*2 ,fill='x')
+# optionmenu_1.set("Standard")
+
+
 appearance_mode_optionemenu = CTkOptionMenu(menu_frame, values=["Dark", "Light"], command=change_appearance_mode_event)
-appearance_mode_optionemenu.pack(side=BOTTOM, pady=(0,40))
+appearance_mode_optionemenu.pack(side=BOTTOM, padx=button_width*2 ,fill='x')
 
 appearance_mode_label = CTkLabel(menu_frame, text="Appearance Mode:", anchor="w")
 appearance_mode_label.pack(side=BOTTOM)
+
+
+
+
+
 
 butt5 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('roboto',  int(button_width*1.4), 'bold'))
 butt5.pack(side=BOTTOM, ipady=int(button_width/2), pady=(0,button_width*2), padx=button_width*2 ,fill='x')
@@ -880,8 +970,8 @@ my_tree.tag_configure('evenrow',background='#303030', foreground='white')
 s = ttk.Style()
 s.theme_use('classic')
 
-s.configure('Treeview.Heading', background="#181818", foreground='white', font=('roboto', int(button_width*1.3), 'bold' ), borderwidth=0 )
-s.configure('Treeview', rowheight=int(button_width*2.5), font=('roboto' , int(button_width*1.3) ), fieldbackground="#363636", bordercolor='#262626')
+s.configure('Treeview.Heading', background="#181818", foreground='white', font=('roboto', int(button_width*1.5), 'bold' ), borderwidth=0 )
+s.configure('Treeview', rowheight=int(button_width*5), font=('roboto' , int(button_width*2) ), fieldbackground="#363636", bordercolor='#262626')
 s.map('Treeview', background=[('selected', '#319f6d')])
 
 bar_label = CTkLabel(my_tree_frame, text='Shop capacity : ', font=('roboto', button_width, 'bold'))
@@ -957,16 +1047,17 @@ qq = start_quotes.get()
 
 
 def ref_quotes():
-    global quote_list
-    global count
-    count = 0
-    global qq
+    pass
+    # global quote_list
+    # global count
+    # count = 0
+    # global qq
 
-    if count == 4:
-        for quote in quote_list:
-                    qq += quote
-                    qq += "\n" 
-    break
+    # if count == 4:
+    #     for quote in quote_list:
+    #                 qq += quote
+    #                 qq += "\n" 
+    # break
 
 
 
