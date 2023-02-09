@@ -21,10 +21,7 @@ root.state('zoomed')
 
 screen_width = root.winfo_screenwidth()
 screen_height = int(root.winfo_screenheight()/1.05)
-# screen_resolution = str(screen_width)+'x'+str(screen_height)
-# print(screen_resolution)
 
-# root.geometry(screen_resolution+'+-10+-1')
 
 
 set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
@@ -53,6 +50,14 @@ c.execute("""CREATE TABLE IF NOT EXISTS history (
     total text
 )
 """)
+
+c.execute("""CREATE TABLE IF NOT EXISTS quotes (
+    quote text,
+    name text,
+    bike text,
+    phone text
+)
+""")
 conn.commit()
 conn.close()
 
@@ -64,27 +69,51 @@ def add_bike():
         last=0
 
     def add_bike_to_database():
-        
-        conn = sqlite3.connect('bikes.db')
-        c = conn.cursor()
-        c.execute("INSERT INTO bikes VALUES (:name, :phone, :bike, :id, :date , :work, :total, :Ready)",
-                {
-                    'name':name_entry.get(),
-                    'phone':phone_entry.get(),
-                    'bike':bike_entry.get(),
-                    'id': int(last)+1,
-                    'date':date_entry.get(),
-                    'work':work_entry.get('1.0', END),
-                    'total':'£'+total_price_entry.get(),
-                    'Ready' : ''
-                })
 
-        conn.commit()
-        conn.close()
+        limit = (work_entry.get('0.0', END))
+        if len(limit) > 200:
+            messagebox.showinfo("Too Long", "Please keep work entry under 200 character!")
+        else:
+            conn = sqlite3.connect('bikes.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO bikes VALUES (:name, :phone, :bike, :id, :date , :work, :total, :Ready)",
+                    {
+                        'name':name_entry.get().strip(),
+                        'phone':phone_entry.get().strip(),
+                        'bike':bike_entry.get().strip(),
+                        'id': int(last)+1,
+                        'date':date_entry.get(),
+                        'work':work_entry.get('0.0', END).strip(),
+                        'total':'£'+total_price_entry.get().strip(),
+                        'Ready' : ''
+                    })
 
-        add_level.destroy()
-        my_tree.delete(*my_tree.get_children())
-        query_database()
+            conn.commit()
+            conn.close()
+
+            if quote_var.get() == 'yes':
+                conn = sqlite3.connect('bikes.db')
+                c = conn.cursor()
+                
+                c.execute("INSERT INTO quotes VALUES (:quote, :name, :bike, :phone)",
+                    {
+                        'quote':quote_var.get().strip(),
+                        'name':name_entry.get().strip(),
+                        'bike':bike_entry.get().strip(),
+                        'phone':phone_entry.get().strip(),
+                        
+                    })
+                conn.commit()
+                conn.close()
+
+            add_level.destroy()
+            my_tree.delete(*my_tree.get_children())
+            query_database()
+
+
+
+
+
 
     add_level = CTkToplevel(root)
     add_level.title("Add Customer")
@@ -128,14 +157,18 @@ def add_bike():
     total_price_entry = CTkEntry(entries_frame, font=('roboto',14))
     total_price_entry.grid(row=2, column=3, sticky=W)
 
+    quote_var = StringVar(entries_frame, "no")
+    checkbox_q = CTkCheckBox(entries_frame, text='Needs Quote', variable=quote_var, onvalue='yes', offvalue='no', font=('roboto', 14))
+    checkbox_q.grid(row=3, column=3, sticky=E, pady=(0, 20))
+
     work_label = CTkLabel(entries_frame, text="Work : ", font=('roboto', 14, 'bold'))
-    work_label.grid(row=3, column=0, sticky=NW, padx=(button_width, 0))
+    work_label.grid(row=4, column=0, sticky=NW, padx=(button_width, 0))
 
     work_entry = CTkTextbox(entries_frame, font=('roboto',14), width=button_width*25)
-    work_entry.grid(row=3, column=1, columnspan=3, sticky=W)
+    work_entry.grid(row=4, column=1, columnspan=3, sticky=W)
 
     add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('roboto', button_width), width=button_width*7)
-    add_but.grid(row=4, column=3, sticky=E, pady=20)
+    add_but.grid(row=5, column=3, sticky=E, pady=20)
 
     add_level.mainloop()
 
@@ -157,40 +190,78 @@ def update_bike():
         conn.commit()
         conn.close()
 
+            
+        def refresh_quotes():
+            
+            global quotes
+
+            conn = sqlite3.connect('bikes.db')
+            c = conn.cursor()
+            c.execute("SELECT * FROM quotes")
+            q_res = c.fetchall()
+
+
+
+            conn.commit()
+            conn.close()
+
+            for i in q_res:
+                quotes.set(i)
+                        
+
+
         def update_bike_in_database():
+            
             MsgBox = messagebox.askquestion ('Update bike','Are you sure?')
             if MsgBox == 'yes':
+                limit2 = (work_entry1.get('0.0', END))
+                if len(limit2) > 200:
+                    messagebox.showinfo("Too Long", "Please keep work entry under 200 character!")
+                else: 
+                    conn = sqlite3.connect('bikes.db')
+                    c = conn.cursor()
+                    c.execute("""UPDATE bikes SET
+                        name = :name,
+                        phone = :phone,
+                        bike = :bike,
+                        date = :date,
+                        work = :work,
+                        total = :total
+                        WHERE oid = :oid""",
+                        {
+                                'name':name_entry1.get().strip(),
+                                'phone':phone_entry1.get().strip(),
+                                'bike':bike_entry1.get().strip(),
+                                'oid':id_from_selection,
+                                'date':date_entry1.get(),
+                                'work':work_entry1.get('0.0', END).strip(),
+                                'total':total_price_entry1.get().strip()
 
-                conn = sqlite3.connect('bikes.db')
-                c = conn.cursor()
-                c.execute("""UPDATE bikes SET
-                    name = :name,
-                    phone = :phone,
-                    bike = :bike,
-                    date = :date,
-                    work = :work,
-                    total = :total
-                    WHERE oid = :oid""",
-                    {
-                            'name':name_entry1.get(),
-                            'phone':phone_entry1.get(),
-                            'bike':bike_entry1.get(),
-                            'oid':id_from_selection,
-                            'date':date_entry1.get(),
-                            'work':work_entry1.get('1.0', END),
-                            'total':total_price_entry1.get()
+                        }
+                    )
 
-                    }
-                )
+                
+                    conn.commit()
+                    conn.close()
 
-                conn.commit()
-                conn.close()
+                    # if quote_var2.get() == 'yes':
+                    #     conn = sqlite3.connect('bikes.db')
+                    #     c = conn.cursor()
+                    #     c.execute("DELETE from quotes WHERE name=? AND bike=?", (name_entry1.get(), bike_entry1.get()))
+                    #     conn.commit()
+                    #     conn.close()
+                    # else:
+                    #     pass
 
-                my_tree.delete(*my_tree.get_children())
-                query_database()
-                update_level.destroy()
+                    my_tree.delete(*my_tree.get_children())
+        
+                    query_database()
+                    update_level.destroy()
             else:
                 pass
+
+
+            refresh_quotes()
 
         def insert_entries():
             date_entry1.set_date(item_values[5]),
@@ -241,16 +312,24 @@ def update_bike():
         total_price_entry1 = CTkEntry(entries_frame1, font=('roboto',14))
         total_price_entry1.grid(row=2, column=3, sticky=W)
 
+        quote_var2 = StringVar(entries_frame1, "yes")
+        checkbox_q2 = CTkCheckBox(entries_frame1, text='Quote Made !', variable=quote_var2, onvalue='yes', offvalue='no', font=('roboto', 14))
+        checkbox_q2.grid(row=4, column=3, sticky=E, pady=(0, 20))
+        checkbox_q2.select()
+
         work_label1 = CTkLabel(entries_frame1, text="Work : ", font=('roboto', 14, 'bold'))
-        work_label1.grid(row=3, column=0, sticky=NW, padx=(button_width, 0))
+        work_label1.grid(row=5, column=0, sticky=NW, padx=(button_width, 0))
 
         work_entry1 = CTkTextbox(entries_frame1, font=('roboto',14), width=button_width*25)
-        work_entry1.grid(row=3, column=1, columnspan=3, sticky=W)
+        work_entry1.grid(row=5, column=1, columnspan=3, sticky=W)
+    
+
 
         update_but1 = CTkButton(entries_frame1, text="Update", command=update_bike_in_database, font=('roboto', button_width), width=button_width*7)
-        update_but1.grid(row=4, column=3, sticky=E, pady=20)
+        update_but1.grid(row=6, column=3, sticky=E, pady=20)
 
         insert_entries()
+
 
         update_level.mainloop()
 
@@ -489,7 +568,7 @@ def get_history():
     date_entry2 = cal.DateEntry(entries_frame2, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width)))
     date_entry2.pack(fill='x', expand=1, padx=button_width*2, pady=(button_width*2))
 
-    id_label2 = CTkLabel(entries_frame2, text="ID (Always Leave Empty!)")
+    id_label2 = CTkLabel(entries_frame2, text="ID (NEVER CHANGE)")
     id_label2.pack()
 
     id_entry2 = CTkEntry(entries_frame2)
@@ -524,6 +603,7 @@ def get_history():
 
     work_entry2 = CTkTextbox(entries_frame2, height=int(screen_height/13))
     work_entry2.pack(fill='x', padx=button_width*2, pady=(0, button_width*2))
+
 
     buttons_hist = CTkFrame(entries_frame)
     buttons_hist.pack(fill='x', expand=1, padx=button_width*2, pady=button_width*2)
@@ -714,14 +794,14 @@ def select_record(e):
         c.execute('SELECT work FROM bikes WHERE rowid=' +id_from_selection )
         records = c.fetchall()
         records_list = records[0]
-        service_text.set('Service Details :  '+records_list[0])
+        service_text.set(records_list[0])
         conn.commit()
         conn.close()
 
-       
-
     except:
         pass  
+
+
 
 menu_width = (screen_width/9)
 button_width = int(menu_width/14)
@@ -739,17 +819,20 @@ butt_pady = int(button_width)
 title_label = CTkLabel(menu_frame, text="Workshop Helper", font=('roboto', button_width*1.5))
 title_label.pack(pady=(int(button_width*3),int(button_width*1.5)),  padx=button_width*2 ,fill='x')
 
-butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('roboto', int(button_width*1.4), 'bold'))
+butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('roboto', int(button_width*1.2), 'bold'))
 butt1.pack(ipady=int(button_width/2), pady=(int(button_width*2), 0), padx=button_width*2 ,fill='x')
 
-butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('roboto',  int(button_width*1.4), 'bold'))
+butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('roboto',  int(button_width*1.2), 'bold'))
 butt2.pack(pady=button_width, ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
-butt3 = CTkButton(menu_frame, text='Ready', command=fixed, font=('roboto',  int(button_width*1.4), 'bold'))
+butt3 = CTkButton(menu_frame, text='Ready', command=fixed, font=('roboto',  int(button_width*1.2), 'bold'))
 butt3.pack(ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
-butt4 = CTkButton(menu_frame, text='Collected', command=fixed_bike, font=('roboto',  int(button_width*1.4), 'bold'))
+butt4 = CTkButton(menu_frame, text='Collected', command=fixed_bike, font=('roboto',  int(button_width*1.2), 'bold'))
 butt4.pack(pady=button_width, ipady=int(button_width/2), padx=button_width*2 ,fill='x')
+
+butt6 = CTkButton(menu_frame, text='Due Today', font=('roboto',  int(button_width*1.2), 'bold'))
+butt6.pack(ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
 appearance_mode_optionemenu = CTkOptionMenu(menu_frame, values=["Dark", "Light"], command=change_appearance_mode_event)
 appearance_mode_optionemenu.pack(side=BOTTOM, pady=(0,40))
@@ -761,25 +844,15 @@ butt5 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('roboto'
 butt5.pack(side=BOTTOM, ipady=int(button_width/2), pady=(0,button_width*2), padx=button_width*2 ,fill='x')
 
 content_frame = CTkFrame(main_frame)
-content_frame.pack(side=RIGHT, fill=BOTH, expand=1, pady=(button_width*3, 0), padx=button_width*3)
+content_frame.pack(side=RIGHT, fill=BOTH, expand=1, pady=(button_width*2), padx=button_width*3)
 
-tree_and_bar_frame = CTkFrame(content_frame)
-tree_and_bar_frame.pack( expand=True, fill='both')
-
-my_tree_frame = CTkFrame(tree_and_bar_frame)
-my_tree_frame.pack( expand=True, fill='both')
+my_tree_frame = CTkFrame(content_frame)
+my_tree_frame.pack( expand=True, fill='both', padx=button_width, pady=button_width)
 
 my_tree = ttk.Treeview(my_tree_frame, selectmode='extended')
-my_tree.pack(fill='both', expand=True)
+my_tree.pack(fill='both', expand=True, padx=button_width, pady=button_width)
 
-bar_and_label_frame = CTkFrame(tree_and_bar_frame)
-bar_and_label_frame.pack( fill='x' )
 
-bar_label = CTkLabel(bar_and_label_frame, text='Shop capacity : ', font=('roboto', button_width, 'bold'))
-bar_label.pack(side=LEFT, padx=(button_width,0 ), pady=(button_width))
-
-progressbar = CTkProgressBar(master=bar_and_label_frame)
-progressbar.pack(side=LEFT,  pady=(button_width), padx=(button_width) )
 
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
@@ -807,26 +880,123 @@ my_tree.tag_configure('evenrow',background='#303030', foreground='white')
 s = ttk.Style()
 s.theme_use('classic')
 
-s.configure('Treeview.Heading', background="#181818", foreground='white', font=('roboto', int(button_width*1.3), 'bold' ), height=14, borderwidth=0 )
-s.configure('Treeview', rowheight=int(button_width*3), font=('roboto' , int(button_width*1.5) ), fieldbackground="#363636", bordercolor='#262626')
+s.configure('Treeview.Heading', background="#181818", foreground='white', font=('roboto', int(button_width*1.3), 'bold' ), borderwidth=0 )
+s.configure('Treeview', rowheight=int(button_width*2.5), font=('roboto' , int(button_width*1.3) ), fieldbackground="#363636", bordercolor='#262626')
 s.map('Treeview', background=[('selected', '#319f6d')])
 
-more_butt_frame = CTkFrame(content_frame)
-more_butt_frame.pack(fill='x',  side=BOTTOM)
+bar_label = CTkLabel(my_tree_frame, text='Shop capacity : ', font=('roboto', button_width, 'bold'))
+bar_label.pack(side=LEFT, padx=(button_width,0 ), pady=(0,int(button_width/2)))
 
-details_and_label_frame = CTkFrame(more_butt_frame)
-details_and_label_frame.pack(anchor=W,side=LEFT, fill='x', expand=1, pady=(button_width*1.5), padx=(0, button_width*1.5))
+progressbar = CTkProgressBar(master=my_tree_frame, width=screen_width/5)
+progressbar.pack(side=LEFT,  pady=(0,int(button_width/2)), padx=(button_width) )
+
+
+
+#### FRAME UNDER TREEVIEW
+more_butt_frame = CTkFrame(content_frame)
+more_butt_frame.pack(fill='x',   pady=(0, button_width), padx=button_width)
+
+
+
+######## FRAME 1
+bottom_frame_height = screen_height/7
+
+details_and_label_width = screen_width/4
+
+details_and_label_pre_frame = CTkFrame(more_butt_frame, width=details_and_label_width, height=bottom_frame_height)
+details_and_label_pre_frame.pack(side=LEFT, fill='both', expand=1, pady=button_width, padx=button_width)
+
+details_and_label_frame = CTkFrame(details_and_label_pre_frame, width=details_and_label_width, height=bottom_frame_height)
+details_and_label_frame.pack(padx=button_width, pady=button_width, side=LEFT)
+details_and_label_frame.propagate(0)
+
+
+
+
+service_details_title = CTkLabel(details_and_label_frame,text='Service Details' , font=('roboto', button_width*1.6, 'bold'))
+service_details_title.pack(padx=button_width, pady=button_width/2)
+
+separator = ttk.Separator(details_and_label_frame, orient='vertical')
+separator.pack(padx=button_width*3, fill='x', anchor=N, pady=(0, button_width/2))
 
 service_text = StringVar()
-service_text.set('Click A Customer To Show Its Details')
-service_details_label = CTkLabel(details_and_label_frame, height=button_width*6.3, wraplength=button_width*50, justify=LEFT, textvariable=service_text , font=('roboto', button_width*1.5))
-service_details_label.pack(anchor=NW, pady=button_width, padx= button_width*1.5)
+service_text.set('Click On A Customer For More Information')
+service_details_label = CTkLabel(details_and_label_frame, justify=CENTER, wraplength=details_and_label_width, textvariable=service_text , font=('roboto', button_width*1.3))
+service_details_label.pack(pady=button_width/4)
 
-stat_frame = CTkFrame(more_butt_frame)
-stat_frame.pack(side=RIGHT, pady=button_width*1.5, anchor=N)
+
+
+### FRAME 2
+
+
+need_quote_title = CTkLabel(details_and_label_pre_frame , text='Need Quote', font=('roboto', button_width*1.6, 'bold'))
+need_quote_title.pack(padx=button_width, pady=(butt_pady, 0))
+
+
+conn = sqlite3.connect('bikes.db')
+c = conn.cursor()
+c.execute("SELECT * FROM quotes")
+starting_quotes = c.fetchall()
+conn.commit()
+conn.close()
+
+quote_list = []
+
+for q in starting_quotes:
+    quote_list.append(q[1]+" - "+q[2])
+
+print(quote_list)
+
+
+
+
+start_quotes = StringVar()
+
+
+qq = start_quotes.get()
+
+
+def ref_quotes():
+    global quote_list
+    global count
+    count = 0
+    global qq
+
+    if count == 4:
+        for quote in quote_list:
+                    qq += quote
+                    qq += "\n" 
+    break
+
+
+
+
+  
+        
+
+       
+        
+
+    start_quotes.set(qq)
+
+
+
+
+need_quote_label = CTkLabel(details_and_label_pre_frame, justify=CENTER, wraplength=details_and_label_width/2, textvariable=start_quotes , font=('roboto', button_width*1.3))
+need_quote_label.pack(pady=button_width/4)
+
+
+
+##### FRAME 3
+
+stat_pre_frame = CTkFrame(more_butt_frame)
+stat_pre_frame.pack(side=LEFT, pady=button_width, padx=button_width)
+
+stat_frame = CTkFrame(stat_pre_frame)
+stat_frame.pack(padx=button_width, pady=button_width)
 
 checkbuttons_frame = CTkFrame(stat_frame)
-checkbuttons_frame.pack(pady=button_width, padx=(button_width*1.5))
+checkbuttons_frame.pack(pady=button_width, padx=button_width, fill='x')
 
 checkbox_1 = CTkCheckBox(master=checkbuttons_frame, text='Basic Service', font=('roboto', button_width))
 checkbox_1.pack(pady=button_width, padx=(button_width*2, 0), side=LEFT)
@@ -837,11 +1007,22 @@ checkbox_2.pack(pady=button_width, padx=(button_width, 0), side=LEFT)
 checkbox_3 = CTkCheckBox(master=checkbuttons_frame, text='Full Service', font=('roboto', button_width))
 checkbox_3.pack(pady=button_width, padx=(button_width), side=LEFT)
 
+
+##### BUTTONS UNDER CHECKBUTTONS
 graph_butt = CTkButton(stat_frame, text='Statistics', font=('roboto',  int(button_width*1.1), 'bold'))
 graph_butt.pack(pady=(0, button_width), padx=( button_width*1.5), side=LEFT, fill='x', expand=1)
 
 hist_butt = CTkButton(stat_frame, text='History', command=get_history, font=('roboto',  int(button_width*1.1), 'bold'))
 hist_butt.pack(pady=(0, button_width,), padx=(0, button_width*1.5), side=RIGHT, fill='x', expand=1)
+
+
+
+
+
+
+ref_quotes()
+
+
 
 query_database()
 
