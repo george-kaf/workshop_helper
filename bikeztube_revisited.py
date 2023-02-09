@@ -829,19 +829,16 @@ def change_scaling_event(new_scaling: str):
 
     
     #slide_int = int(slide.replace(".0", ""))
-    print(new_scaling)   
 
     if new_scaling < 0.6 :
-
-
 
         global button_width
         button_width2 = button_width
         new_scaling_float = 0.9
         set_widget_scaling(new_scaling_float)
         s=ttk.Style()
-        s.configure('Treeview.Heading', font=('roboto', int(button_width2*1.3), 'bold' ), borderwidth=0 )
-        s.configure('Treeview', rowheight= int(button_width2*4) , font=('roboto' , int(button_width2*1.7)))
+        s.configure('Treeview.Heading', font=('roboto', int(button_width2*1.1), 'bold' ), borderwidth=0 )
+        s.configure('Treeview', rowheight= int(button_width2*4) , font=('roboto' , int(button_width2*1.5)))
 
 
     if new_scaling > 1.6:        
@@ -857,8 +854,8 @@ def change_scaling_event(new_scaling: str):
         new_scaling_float = 1
         set_widget_scaling(new_scaling_float)
         s=ttk.Style()
-        s.configure('Treeview.Heading',  font=('roboto', int(button_width*1.5), 'bold' ), borderwidth=0 )
-        s.configure('Treeview', rowheight=int(button_width*5), font=('roboto' , int(button_width*2) ))
+        s.configure('Treeview.Heading',  font=('roboto', int(button_width*1.3), 'bold' ), borderwidth=0 )
+        s.configure('Treeview', rowheight=int(button_width*4.5), font=('roboto' , int(button_width*1.8) ))
 
 menu_width = (screen_width/9)
 button_width = int(menu_width/14)
@@ -892,14 +889,7 @@ butt6 = CTkButton(menu_frame, text='Due Today', font=('roboto',  int(button_widt
 butt6.pack(ipady=int(button_width/2), padx=button_width*2 ,fill='x')
 
 
-def slide(sl :str):
 
-    ppp = StringVar()
-    ppp.set(sl)
-
-    slide = ppp.get()
-    slide_int = int(slide.replace(".0", ""))
-    print(slide_int)
 
 slider_1 = CTkSlider(menu_frame, from_=0, to=2, command=change_scaling_event)
 slider_1.pack(side=BOTTOM, pady=button_width, padx=button_width*2 ,fill='x')
