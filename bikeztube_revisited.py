@@ -67,8 +67,6 @@ c.execute("""CREATE TABLE IF NOT EXISTS cre (
     sub text
 )
 """)
-conn.commit()
-conn.close()
 
 
 def add_bike():
@@ -654,12 +652,6 @@ def get_history():
     def reset():
 
         my_hist_tree.delete(*my_hist_tree.get_children())
-        global count
-        count = 0
-
-        conn = sqlite3.connect('bikes.db')
-        c = conn.cursor()
-        c.execute('SELECT rowid, * FROM history')
 
         name_entry2.delete(0, END)
         phone_entry2.delete(0, END)
@@ -667,20 +659,9 @@ def get_history():
         date_entry2.delete(0, END)
         work_entry2.delete('1.0', END)
         total_price_entry2.delete(0, END)
+        query_history()
 
-        results = c.fetchall()
 
-        records = sorted(results, key=lambda tup: tup[0], reverse=True)
-
-        for record in records:
-            if count % 2 ==0:
-                my_hist_tree.insert(parent='', index='end',  text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('evenrow',))
-            else:
-                my_hist_tree.insert(parent='', index='end',  text='', values=(str(record[1]), str(record[2]), str(record[3]), record[0], str(record[5]), str(record[6]), str(record[7])), tags=('oddrow',))
-            count +=1
-
-        conn.commit()
-        conn.close() 
 
 
     def searcht():
@@ -730,11 +711,13 @@ def get_history():
     hist_frame = CTkFrame(his)
     hist_frame.pack(fill='both', expand=True)
 
-    my_hist_tree_frame = CTkFrame(hist_frame)
-    my_hist_tree_frame.pack(fill='both', expand=True,side=LEFT, pady=int(screen_height/8), padx=(button_width*2, 0))
+    my_hist_tree_frame = CTkFrame(hist_frame, width=screen_width/1.2)
+    my_hist_tree_frame.pack(fill='y', expand=True,side=LEFT, pady=int(screen_height/8), padx=(button_width*2, 0))
+    my_hist_tree_frame.propagate(0)
 
     buttons_hist_frame = CTkFrame(hist_frame)
-    buttons_hist_frame.pack(side=RIGHT)
+    buttons_hist_frame.pack(side=RIGHT, fill='x', expand=1)
+    
  
     my_hist_tree = ttk.Treeview(my_hist_tree_frame, selectmode='extended')
     my_hist_tree.pack(fill='both', expand=True, pady=(button_width*2), padx=button_width*2)
@@ -745,7 +728,7 @@ def get_history():
     my_hist_tree.column("Name", anchor=CENTER)
     my_hist_tree.column("Phone", anchor=CENTER)
     my_hist_tree.column("Bike", anchor=CENTER)
-    my_hist_tree.column("ID", anchor=CENTER, width=button_width*2)
+    my_hist_tree.column("ID", anchor=CENTER, width=button_width*4)
     my_hist_tree.column("Date", anchor=CENTER)
     my_hist_tree.column("Work", anchor=CENTER)
     my_hist_tree.column("Total", anchor=CENTER)
@@ -1136,20 +1119,31 @@ def set_cred():
     global temp_subject
     global temp_body 
 
-    conn = sqlite3.connect('bikes.db')
-    c = conn.cursor()
-    
-    c.execute("SELECT * FROM cre")
-    cred = c.fetchall()
-    cred_list = cred[0]
-    temp_username.set(cred_list[0])
-    temp_password.set(cred_list[1])
-    temp_receiver.set(cred_list[2])
-    temp_subject.set(cred_list[3])
+    try:
+        conn = sqlite3.connect('bikes.db')
+        c.execute("SELECT * FROM cre")
+        cred = c.fetchall()
+        cred_list = cred[0]
 
-    conn.commit()
-    conn.close()
+        temp_username.set(cred_list[0])
+        temp_password.set(cred_list[1])
+        temp_receiver.set(cred_list[2])
+        temp_subject.set(cred_list[3])
 
+        conn.commit()
+        conn.close()
+        
+    except:
+        c = conn.cursor()
+        c.execute("INSERT INTO cre VALUES (:usr, :pss, :recip, :sub)",
+                            {
+                                'usr':"Sample",
+                                'pss':"Sample",
+                                'recip':"Sample",
+                                'sub': "Sample"
+                            })
+        conn.commit()
+        conn.close()
 
 def save():
 
@@ -1354,7 +1348,7 @@ send_butt.pack(pady=(0,button_width), ipady=int(button_width/2), padx=button_wid
 
 notif = CTkLabel(menu_frame, text="", font=('roboto',14))
 notif.pack(pady=(0,button_width), ipady=int(button_width/2), padx=button_width*2 ,fill='x')
-notif.configure(text="Ctrl, click and Enter to email", height=button_width*4)
+notif.configure(text="Ctrl Select Enter", height=button_width*4)
 
 optionmenu_1 = CTkOptionMenu(menu_frame, values=["Small", "Standard", "Large"],  command=change_scaling_event, font=("roboto", button_width*1.1, 'bold'))
 optionmenu_1.pack(side=BOTTOM, pady=(button_width, button_width*2), padx=button_width*2 ,fill='x')
@@ -1385,7 +1379,7 @@ my_tree.column("Ready", anchor=CENTER, width=button_width*4)
 my_tree.column("Name", anchor=CENTER)
 my_tree.column("Phone", anchor=CENTER)
 my_tree.column("Bike", anchor=CENTER)
-my_tree.column("ID", anchor=CENTER, width=button_width)
+my_tree.column("ID", anchor=CENTER, width=button_width*4)
 my_tree.column("Date", anchor=CENTER)
 my_tree.column("Total", anchor=CENTER)
 
