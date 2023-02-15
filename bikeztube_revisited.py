@@ -198,118 +198,118 @@ def add_bike():
     service_choice = CTkFrame(service_options_list_frame, fg_color="transparent")
     service_choice.pack(pady=button_width, padx=button_width)
 
-    basic_butt = CTkButton(service_choice, text="Basic Service", command=lambda: work_entry.insert(END, 'Basic Service, '))
+    basic_butt = CTkButton(service_choice, text="Basic Service", command=lambda: work_entry.insert(END, 'Basic Service '))
     basic_butt.pack()
 
-    commuter_butt = CTkButton(service_choice, text="Commuter Service", command=lambda: work_entry.insert(END, 'Commuter Service, '))
+    commuter_butt = CTkButton(service_choice, text="Commuter Service", command=lambda: work_entry.insert(END, 'Commuter Service '))
     commuter_butt.pack()
 
-    full_butt = CTkButton(service_choice, text="Full Service", command=lambda: work_entry.insert(END, 'Full Service, '))
+    full_butt = CTkButton(service_choice, text="Full Service", command=lambda: work_entry.insert(END, 'Full Service '))
     full_butt.pack()
 
     brakes_choice = CTkFrame(service_options_list_frame, fg_color="transparent")
     brakes_choice.pack( padx=button_width)
 
-    BrakePadsF_butt = CTkButton(brakes_choice, text="Brake Pads Front", command=lambda: work_entry.insert(END, 'Brake Pads Front, '))
+    BrakePadsF_butt = CTkButton(brakes_choice, text="Brake Pads Front", command=lambda: work_entry.insert(END, 'Brake Pads Front '))
     BrakePadsF_butt.pack()
 
-    BrakePadsR_butt = CTkButton(brakes_choice, text="Brake Pads Rear", command=lambda: work_entry.insert(END, 'Brake Pads Rear, '))
+    BrakePadsR_butt = CTkButton(brakes_choice, text="Brake Pads Rear", command=lambda: work_entry.insert(END, 'Brake Pads Rear '))
     BrakePadsR_butt.pack()
 
-    BrakeWireF_butt = CTkButton(brakes_choice, text="Brake Wire Front", command=lambda: work_entry.insert(END, 'Brake Wire Front, '))
+    BrakeWireF_butt = CTkButton(brakes_choice, text="Brake Wire Front", command=lambda: work_entry.insert(END, 'Brake Wire Front '))
     BrakeWireF_butt.pack()
 
-    BrakeWireR_butt = CTkButton(brakes_choice, text="Brake Wire Rear", command=lambda: work_entry.insert(END, 'Brake Wire Rear, '))
+    BrakeWireR_butt = CTkButton(brakes_choice, text="Brake Wire Rear", command=lambda: work_entry.insert(END, 'Brake Wire Rear '))
     BrakeWireR_butt.pack()
 
     wheels_choice = CTkFrame(service_options_list_frame, fg_color="transparent")
     wheels_choice.pack(pady=button_width, padx=button_width)
 
-    TyreFront_butt = CTkButton(wheels_choice, text="Tyre Front", command=lambda: work_entry.insert(END, 'Tyre Front, '))
+    TyreFront_butt = CTkButton(wheels_choice, text="Tyre Front", command=lambda: work_entry.insert(END, 'Tyre Front '))
     TyreFront_butt.pack()
 
-    Tyre_Rear_butt = CTkButton(wheels_choice, text="Tyre Rear", command=lambda: work_entry.insert(END, 'Tyre Rear, '))
+    Tyre_Rear_butt = CTkButton(wheels_choice, text="Tyre Rear", command=lambda: work_entry.insert(END, 'Tyre Rear '))
     Tyre_Rear_butt.pack()
 
-    innerTubeFront_butt = CTkButton(wheels_choice, text="Inner Tube Front", command=lambda: work_entry.insert(END, 'Inner Tube Front, '))
+    innerTubeFront_butt = CTkButton(wheels_choice, text="Inner Tube Front", command=lambda: work_entry.insert(END, 'Inner Tube Front '))
     innerTubeFront_butt.pack()
 
-    innerTubeREAR_butt = CTkButton(wheels_choice, text="Inner Tube Rear", command=lambda: work_entry.insert(END, 'Inner Tube Rear, '))
+    innerTubeREAR_butt = CTkButton(wheels_choice, text="Inner Tube Rear", command=lambda: work_entry.insert(END, 'Inner Tube Rear '))
     innerTubeREAR_butt.pack()
 
-    wheelF_butt = CTkButton(wheels_choice, text="Wheel Front", command=lambda: work_entry.insert(END, 'Wheel Front, '))
+    wheelF_butt = CTkButton(wheels_choice, text="Wheel Front", command=lambda: work_entry.insert(END, 'Wheel Front '))
     wheelF_butt.pack()
 
-    wheelR_butt = CTkButton(wheels_choice, text="Wheel Rear", command=lambda: work_entry.insert(END, 'Wheel Rear, '))
+    wheelR_butt = CTkButton(wheels_choice, text="Wheel Rear", command=lambda: work_entry.insert(END, 'Wheel Rear '))
     wheelR_butt.pack()
 
     gears_choice = CTkFrame(service_options_list_frame2, fg_color="transparent")
     gears_choice.pack(pady=button_width, padx=button_width)
 
-    GearWireF_butt = CTkButton(gears_choice, text="Gear Wire Front", command=lambda: work_entry.insert(END, 'Gear Wire Front, '))
+    GearWireF_butt = CTkButton(gears_choice, text="Gear Wire Front", command=lambda: work_entry.insert(END, 'Gear Wire Front '))
     GearWireF_butt.pack()
 
-    GearWireR_butt = CTkButton(gears_choice, text="Gear Wire Rear", command=lambda: work_entry.insert(END, 'Gear Wire Rear, '))
+    GearWireR_butt = CTkButton(gears_choice, text="Gear Wire Rear", command=lambda: work_entry.insert(END, 'Gear Wire Rear '))
     GearWireR_butt.pack()
 
-    Chain_butt = CTkButton(gears_choice, text="Chain", command=lambda: work_entry.insert(END, 'Chain, '))
+    Chain_butt = CTkButton(gears_choice, text="Chain", command=lambda: work_entry.insert(END, 'Chain '))
     Chain_butt.pack()
 
-    Cassette_butt = CTkButton(gears_choice, text="Cassette", command=lambda: work_entry.insert(END, 'Cassette, '))
+    Cassette_butt = CTkButton(gears_choice, text="Cassette", command=lambda: work_entry.insert(END, 'Cassette '))
     Cassette_butt.pack()
 
-    Crankset_butt = CTkButton(gears_choice, text="Crankset", command=lambda: work_entry.insert(END, 'Crankset, '))
+    Crankset_butt = CTkButton(gears_choice, text="Crankset", command=lambda: work_entry.insert(END, 'Crankset '))
     Crankset_butt.pack()
 
-    Chainring_butt = CTkButton(gears_choice, text="Chainring", command=lambda: work_entry.insert(END, 'Chainring, '))
+    Chainring_butt = CTkButton(gears_choice, text="Chainring", command=lambda: work_entry.insert(END, 'Chainring '))
     Chainring_butt.pack()
 
-    DerailleurF_butt = CTkButton(gears_choice, text="Derailleur Front", command=lambda: work_entry.insert(END, 'Derailleur Front, '))
+    DerailleurF_butt = CTkButton(gears_choice, text="Derailleur Front", command=lambda: work_entry.insert(END, 'Derailleur Front '))
     DerailleurF_butt.pack()
 
-    DerailleurR_butt = CTkButton(gears_choice, text="Derailleur Rear", command=lambda: work_entry.insert(END, 'Derailleur Rear, '))
+    DerailleurR_butt = CTkButton(gears_choice, text="Derailleur Rear", command=lambda: work_entry.insert(END, 'Derailleur Rear '))
     DerailleurR_butt.pack()
 
     frame_choice = CTkFrame(service_options_list_frame2, fg_color="transparent")
     frame_choice.pack(pady=(0, button_width), padx=button_width)
 
-    headset_butt = CTkButton(frame_choice, text="Headset", command=lambda: work_entry.insert(END, 'Headset, '))
+    headset_butt = CTkButton(frame_choice, text="Headset", command=lambda: work_entry.insert(END, 'Headset '))
     headset_butt.pack()
 
-    BottomB_butt = CTkButton(frame_choice, text="Bottom Bracket", command=lambda: work_entry.insert(END, 'Bottom Bracket, '))
+    BottomB_butt = CTkButton(frame_choice, text="Bottom Bracket", command=lambda: work_entry.insert(END, 'Bottom Bracket '))
     BottomB_butt.pack()
 
-    hanger_butt = CTkButton(frame_choice, text="Hanger", command=lambda: work_entry.insert(END, 'Hanger, '))
+    hanger_butt = CTkButton(frame_choice, text="Hanger", command=lambda: work_entry.insert(END, 'Hanger '))
     hanger_butt.pack()
 
-    Pedals_butt = CTkButton(frame_choice, text="Pedals", command=lambda: work_entry.insert(END, 'Pedals, '))
+    Pedals_butt = CTkButton(frame_choice, text="Pedals", command=lambda: work_entry.insert(END, 'Pedals '))
     Pedals_butt.pack()
 
-    Bartape_butt = CTkButton(frame_choice, text="Bartape", command=lambda: work_entry.insert(END, 'Bartape, '))
+    Bartape_butt = CTkButton(frame_choice, text="Bartape", command=lambda: work_entry.insert(END, 'Bartape '))
     Bartape_butt.pack()
 
-    grips_butt = CTkButton(frame_choice, text="Grips", command=lambda: work_entry.insert(END, 'Grips, '))
+    grips_butt = CTkButton(frame_choice, text="Grips", command=lambda: work_entry.insert(END, 'Grips '))
     grips_butt.pack()
 
     adj_choice = CTkFrame(service_options_list_frame3, fg_color="transparent")
     adj_choice.pack(pady=button_width, padx=button_width)
 
-    GearAdjF_butt = CTkButton(adj_choice, text="Gear Adjust. Front", command=lambda: work_entry.insert(END, 'Gear Adjustment Front, '))
+    GearAdjF_butt = CTkButton(adj_choice, text="Gear Adjust. Front", command=lambda: work_entry.insert(END, 'Gear Adjustment Front '))
     GearAdjF_butt.pack()
 
-    GearAdjR_butt = CTkButton(adj_choice, text="Gear Adjust. Rear", command=lambda: work_entry.insert(END, 'Gear Adjustment Rear, '))
+    GearAdjR_butt = CTkButton(adj_choice, text="Gear Adjust. Rear", command=lambda: work_entry.insert(END, 'Gear Adjustment Rear '))
     GearAdjR_butt.pack()
 
-    BrakeAdjF_butt = CTkButton(adj_choice, text="Brake Adjust. Front", command=lambda: work_entry.insert(END, 'Brake Adjustment Front, '))
+    BrakeAdjF_butt = CTkButton(adj_choice, text="Brake Adjust. Front", command=lambda: work_entry.insert(END, 'Brake Adjustment Front '))
     BrakeAdjF_butt.pack()
 
-    BrakeAdjR_butt = CTkButton(adj_choice, text="Brake Adjust. Rear", command=lambda: work_entry.insert(END, 'Brake Adjustment Rear, '))
+    BrakeAdjR_butt = CTkButton(adj_choice, text="Brake Adjust. Rear", command=lambda: work_entry.insert(END, 'Brake Adjustment Rear '))
     BrakeAdjR_butt.pack()
 
-    HeadAdj_butt = CTkButton(adj_choice, text="Headset Adjust.", command=lambda: work_entry.insert(END, 'Headset Adjustment, '))
+    HeadAdj_butt = CTkButton(adj_choice, text="Headset Adjust.", command=lambda: work_entry.insert(END, 'Headset Adjustment '))
     HeadAdj_butt.pack()
 
-    BottombAdj_butt = CTkButton(adj_choice, text="B. Bracket Adjust.", command=lambda: work_entry.insert(END, 'Bottom Bracket Adjustment, '))
+    BottombAdj_butt = CTkButton(adj_choice, text="B. Bracket Adjust.", command=lambda: work_entry.insert(END, 'Bottom Bracket Adjustment '))
     BottombAdj_butt.pack()
 
     add_level.mainloop()
@@ -446,101 +446,125 @@ def update_bike():
         service_options_list_frame2 = CTkFrame(service_parts1)
         service_options_list_frame2.pack(side=LEFT, padx= (0,button_width*2), pady=button_width*2)
 
+        service_options_list_frame3 = CTkFrame(service_parts1)
+        service_options_list_frame3.pack(side=LEFT, padx= (0,button_width*2), pady=button_width*2)
+
         service_choice = CTkFrame(service_options_list_frame, fg_color="transparent")
         service_choice.pack(pady=button_width, padx=button_width)
 
-        basic_butt = CTkButton(service_choice, text="Basic Service", command=lambda: work_entry1.insert(END, 'Basic Service, '))
+        basic_butt = CTkButton(service_choice, text="Basic Service", command=lambda: work_entry1.insert(END, 'Basic Service '))
         basic_butt.pack()
 
-        commuter_butt = CTkButton(service_choice, text="Commuter Service", command=lambda: work_entry1.insert(END, 'Commuter Service, '))
+        commuter_butt = CTkButton(service_choice, text="Commuter Service", command=lambda: work_entry1.insert(END, 'Commuter Service '))
         commuter_butt.pack()
 
-        full_butt = CTkButton(service_choice, text="Full Service", command=lambda: work_entry1.insert(END, 'Full Service, '))
+        full_butt = CTkButton(service_choice, text="Full Service", command=lambda: work_entry1.insert(END, 'Full Service '))
         full_butt.pack()
 
         brakes_choice = CTkFrame(service_options_list_frame, fg_color="transparent")
         brakes_choice.pack( padx=button_width)
 
-        BrakePadsF_butt = CTkButton(brakes_choice, text="Brake Pads Front", command=lambda: work_entry1.insert(END, 'Brake Pads Front, '))
+        BrakePadsF_butt = CTkButton(brakes_choice, text="Brake Pads Front", command=lambda: work_entry1.insert(END, 'Brake Pads Front '))
         BrakePadsF_butt.pack()
 
-        BrakePadsR_butt = CTkButton(brakes_choice, text="Brake Pads Rear", command=lambda: work_entry1.insert(END, 'Brake Pads Rear, '))
+        BrakePadsR_butt = CTkButton(brakes_choice, text="Brake Pads Rear", command=lambda: work_entry1.insert(END, 'Brake Pads Rear '))
         BrakePadsR_butt.pack()
 
-        BrakeWireF_butt = CTkButton(brakes_choice, text="Brake Wire Front", command=lambda: work_entry1.insert(END, 'Brake Wire Front, '))
+        BrakeWireF_butt = CTkButton(brakes_choice, text="Brake Wire Front", command=lambda: work_entry1.insert(END, 'Brake Wire Front '))
         BrakeWireF_butt.pack()
 
-        BrakeWireR_butt = CTkButton(brakes_choice, text="Brake Wire Rear", command=lambda: work_entry1.insert(END, 'Brake Wire Rear, '))
+        BrakeWireR_butt = CTkButton(brakes_choice, text="Brake Wire Rear", command=lambda: work_entry1.insert(END, 'Brake Wire Rear '))
         BrakeWireR_butt.pack()
 
         wheels_choice = CTkFrame(service_options_list_frame, fg_color="transparent")
         wheels_choice.pack(pady=button_width, padx=button_width)
 
-        TyreFront_butt = CTkButton(wheels_choice, text="Tyre Front", command=lambda: work_entry1.insert(END, 'Tyre Front, '))
+        TyreFront_butt = CTkButton(wheels_choice, text="Tyre Front", command=lambda: work_entry1.insert(END, 'Tyre Front '))
         TyreFront_butt.pack()
 
-        Tyre_Rear_butt = CTkButton(wheels_choice, text="Tyre Rear", command=lambda: work_entry1.insert(END, 'Tyre Rear, '))
+        Tyre_Rear_butt = CTkButton(wheels_choice, text="Tyre Rear", command=lambda: work_entry1.insert(END, 'Tyre Rear '))
         Tyre_Rear_butt.pack()
 
-        innerTubeFront_butt = CTkButton(wheels_choice, text="Inner Tube Front", command=lambda: work_entry1.insert(END, 'Inner Tube Front, '))
+        innerTubeFront_butt = CTkButton(wheels_choice, text="Inner Tube Front", command=lambda: work_entry1.insert(END, 'Inner Tube Front '))
         innerTubeFront_butt.pack()
 
-        innerTubeREAR_butt = CTkButton(wheels_choice, text="Inner Tube Rear", command=lambda: work_entry1.insert(END, 'Inner Tube Rear, '))
+        innerTubeREAR_butt = CTkButton(wheels_choice, text="Inner Tube Rear", command=lambda: work_entry1.insert(END, 'Inner Tube Rear '))
         innerTubeREAR_butt.pack()
 
-        wheelF_butt = CTkButton(wheels_choice, text="Wheel Front", command=lambda: work_entry1.insert(END, 'Wheel Front, '))
+        wheelF_butt = CTkButton(wheels_choice, text="Wheel Front", command=lambda: work_entry1.insert(END, 'Wheel Front '))
         wheelF_butt.pack()
 
-        wheelR_butt = CTkButton(wheels_choice, text="Wheel Rear", command=lambda: work_entry1.insert(END, 'Wheel Rear, '))
+        wheelR_butt = CTkButton(wheels_choice, text="Wheel Rear", command=lambda: work_entry1.insert(END, 'Wheel Rear '))
         wheelR_butt.pack()
 
         gears_choice = CTkFrame(service_options_list_frame2, fg_color="transparent")
         gears_choice.pack(pady=button_width, padx=button_width)
 
-        GearWireF_butt = CTkButton(gears_choice, text="Gear Wire Front", command=lambda: work_entry1.insert(END, 'Gear Wire Front, '))
+        GearWireF_butt = CTkButton(gears_choice, text="Gear Wire Front", command=lambda: work_entry1.insert(END, 'Gear Wire Front '))
         GearWireF_butt.pack()
 
-        GearWireR_butt = CTkButton(gears_choice, text="Gear Wire Rear", command=lambda: work_entry1.insert(END, 'Gear Wire Rear, '))
+        GearWireR_butt = CTkButton(gears_choice, text="Gear Wire Rear", command=lambda: work_entry1.insert(END, 'Gear Wire Rear '))
         GearWireR_butt.pack()
 
-        Chain_butt = CTkButton(gears_choice, text="Chain", command=lambda: work_entry1.insert(END, 'Chain, '))
+        Chain_butt = CTkButton(gears_choice, text="Chain", command=lambda: work_entry1.insert(END, 'Chain '))
         Chain_butt.pack()
 
-        Cassette_butt = CTkButton(gears_choice, text="Cassette", command=lambda: work_entry1.insert(END, 'Cassette, '))
+        Cassette_butt = CTkButton(gears_choice, text="Cassette", command=lambda: work_entry1.insert(END, 'Cassette '))
         Cassette_butt.pack()
 
-        Crankset_butt = CTkButton(gears_choice, text="Crankset", command=lambda: work_entry1.insert(END, 'Crankset, '))
+        Crankset_butt = CTkButton(gears_choice, text="Crankset", command=lambda: work_entry1.insert(END, 'Crankset '))
         Crankset_butt.pack()
 
-        Chainring_butt = CTkButton(gears_choice, text="Chainring", command=lambda: work_entry1.insert(END, 'Chainring, '))
+        Chainring_butt = CTkButton(gears_choice, text="Chainring", command=lambda: work_entry1.insert(END, 'Chainring '))
         Chainring_butt.pack()
 
-        DerailleurF_butt = CTkButton(gears_choice, text="Derailleur Front", command=lambda: work_entry1.insert(END, 'Derailleur Front, '))
+        DerailleurF_butt = CTkButton(gears_choice, text="Derailleur Front", command=lambda: work_entry1.insert(END, 'Derailleur Front '))
         DerailleurF_butt.pack()
 
-        DerailleurR_butt = CTkButton(gears_choice, text="Derailleur Rear", command=lambda: work_entry1.insert(END, 'Derailleur Rear, '))
+        DerailleurR_butt = CTkButton(gears_choice, text="Derailleur Rear", command=lambda: work_entry1.insert(END, 'Derailleur Rear '))
         DerailleurR_butt.pack()
 
         frame_choice = CTkFrame(service_options_list_frame2, fg_color="transparent")
         frame_choice.pack(pady=(0, button_width), padx=button_width)
 
-        headset_butt = CTkButton(frame_choice, text="Headset", command=lambda: work_entry1.insert(END, 'Headset, '))
+        headset_butt = CTkButton(frame_choice, text="Headset", command=lambda: work_entry1.insert(END, 'Headset '))
         headset_butt.pack()
 
-        BottomB_butt = CTkButton(frame_choice, text="Bottom Bracket", command=lambda: work_entry1.insert(END, 'Bottom Bracket, '))
+        BottomB_butt = CTkButton(frame_choice, text="Bottom Bracket", command=lambda: work_entry1.insert(END, 'Bottom Bracket '))
         BottomB_butt.pack()
 
-        hanger_butt = CTkButton(frame_choice, text="Hanger", command=lambda: work_entry1.insert(END, 'Hanger, '))
+        hanger_butt = CTkButton(frame_choice, text="Hanger", command=lambda: work_entry1.insert(END, 'Hanger '))
         hanger_butt.pack()
 
-        Pedals_butt = CTkButton(frame_choice, text="Pedals", command=lambda: work_entry1.insert(END, 'Pedals, '))
+        Pedals_butt = CTkButton(frame_choice, text="Pedals", command=lambda: work_entry1.insert(END, 'Pedals '))
         Pedals_butt.pack()
 
-        Bartape_butt = CTkButton(frame_choice, text="Bartape", command=lambda: work_entry1.insert(END, 'Bartape, '))
+        Bartape_butt = CTkButton(frame_choice, text="Bartape", command=lambda: work_entry1.insert(END, 'Bartape '))
         Bartape_butt.pack()
 
-        grips_butt = CTkButton(frame_choice, text="Grips", command=lambda: work_entry1.insert(END, 'Grips, '))
+        grips_butt = CTkButton(frame_choice, text="Grips", command=lambda: work_entry1.insert(END, 'Grips '))
         grips_butt.pack()
+
+        adj_choice = CTkFrame(service_options_list_frame3, fg_color="transparent")
+        adj_choice.pack(pady=button_width, padx=button_width)
+
+        GearAdjF_butt = CTkButton(adj_choice, text="Gear Adjust. Front", command=lambda: work_entry1.insert(END, 'Gear Adjustment Front '))
+        GearAdjF_butt.pack()
+
+        GearAdjR_butt = CTkButton(adj_choice, text="Gear Adjust. Rear", command=lambda: work_entry1.insert(END, 'Gear Adjustment Rear '))
+        GearAdjR_butt.pack()
+
+        BrakeAdjF_butt = CTkButton(adj_choice, text="Brake Adjust. Front", command=lambda: work_entry1.insert(END, 'Brake Adjustment Front '))
+        BrakeAdjF_butt.pack()
+
+        BrakeAdjR_butt = CTkButton(adj_choice, text="Brake Adjust. Rear", command=lambda: work_entry1.insert(END, 'Brake Adjustment Rear '))
+        BrakeAdjR_butt.pack()
+
+        HeadAdj_butt = CTkButton(adj_choice, text="Headset Adjust.", command=lambda: work_entry1.insert(END, 'Headset Adjustment '))
+        HeadAdj_butt.pack()
+
+        BottombAdj_butt = CTkButton(adj_choice, text="B. Bracket Adjust.", command=lambda: work_entry1.insert(END, 'Bottom Bracket Adjustment '))
+        BottombAdj_butt.pack()
 
         insert_entries()
 
@@ -688,7 +712,7 @@ def get_history():
     hist_frame.pack(fill='both', expand=True)
 
     my_hist_tree_frame = CTkFrame(hist_frame, width=screen_width/1.3)
-    my_hist_tree_frame.pack(fill='y', expand=True,side=LEFT, pady=int(screen_height/8), padx=(button_width*2, 0))
+    my_hist_tree_frame.pack(fill='both', expand=True,side=LEFT, pady=int(screen_height/8), padx=(button_width, 0))
     my_hist_tree_frame.propagate(0)
 
     buttons_hist_frame = CTkFrame(hist_frame)
@@ -728,7 +752,7 @@ def get_history():
     search_frame = CTkFrame(buttons_hist_frame)
     search_frame.pack(fill='x',  padx=button_width*2, pady=(button_width))
 
-    searchbox_label = CTkLabel(search_frame, text='Search :  ', justify=CENTER, font=("roboto", button_width*1.5))
+    searchbox_label = CTkLabel(search_frame, text='Search :  ', justify=CENTER, font=("roboto", button_width*1.8))
     searchbox_label.pack(side=LEFT, padx=(button_width*2,0), pady=(button_width*2))
 
     searchbox_entry = CTkEntry(search_frame)
@@ -737,16 +761,16 @@ def get_history():
     search_frame_buttons= CTkFrame(buttons_hist_frame)
     search_frame_buttons.pack(fill='x', padx=(button_width*2), pady=(0, button_width)) 
 
-    reset_button = CTkButton(search_frame_buttons, text='Reset', command=reset, font=("roboto", button_width*1.5))
+    reset_button = CTkButton(search_frame_buttons, text='Reset', command=reset, font=("roboto", button_width*1.8))
     reset_button.pack(side=LEFT, pady=button_width, padx=(button_width, int(button_width/2)), fill='x', expand=1)
 
-    search_button = CTkButton(search_frame_buttons, text='Go', command=searcht, font=("roboto", button_width*1.5))
+    search_button = CTkButton(search_frame_buttons, text='Go', command=searcht, font=("roboto", button_width*1.8))
     search_button.pack(side=RIGHT, pady=button_width, padx=(int(button_width/2), button_width), fill='x', expand=1)
 
     entries_frame2 = CTkFrame(buttons_hist_frame)
     entries_frame2.pack(fill='both', expand=1, padx=button_width*2)
 
-    date_entry2 = DateEntry(entries_frame2, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width*1.5)))
+    date_entry2 = DateEntry(entries_frame2, date_pattern='dd/MM/yyyy', font=('roboto', int(button_width*1.8)))
     date_entry2.pack(fill='x',  padx=button_width*2, pady=(button_width*2))
 
     entries_and_labels_frame = CTkFrame(entries_frame2, corner_radius=0)
@@ -755,55 +779,55 @@ def get_history():
     name_frame = CTkFrame(entries_and_labels_frame, corner_radius=0, fg_color="transparent")
     name_frame.pack(fill='both', expand=1, pady=(button_width,0))
 
-    name_label2 = CTkLabel(name_frame, text="Name :  ", width=button_width, font=('roboto', button_width*1.2, 'bold'), text_color='#585858')
+    name_label2 = CTkLabel(name_frame, text="Name :  ", width=button_width, font=('roboto', button_width*1.8, 'bold'), text_color='#585858')
     name_label2.pack(side=LEFT, anchor=E, fill='x', padx=button_width)
 
-    name_entry2 = CTkEntry(name_frame, font=('roboto', button_width*1.2))
+    name_entry2 = CTkEntry(name_frame, font=('roboto', button_width*1.8))
     name_entry2.pack(side=RIGHT, fill='x', expand=1)
 
     phone_frame = CTkFrame(entries_and_labels_frame, corner_radius=0, fg_color="transparent")
     phone_frame.pack(fill='both', expand=1, pady=(button_width,0))
 
-    phone_label2 = CTkLabel(phone_frame, text="Phone :  ", width=button_width, font=('roboto', button_width*1.2, 'bold'), text_color='#585858')
+    phone_label2 = CTkLabel(phone_frame, text="Phone :  ", width=button_width, font=('roboto', button_width*1.8, 'bold'), text_color='#585858')
     phone_label2.pack(side=LEFT, anchor=E, fill='x', padx=button_width)
 
-    phone_entry2 = CTkEntry(phone_frame, font=('roboto', button_width*1.2))
+    phone_entry2 = CTkEntry(phone_frame, font=('roboto', button_width*1.8))
     phone_entry2.pack(side=RIGHT, fill='x', expand=1)
 
     bike_frame = CTkFrame(entries_and_labels_frame, corner_radius=0, fg_color="transparent")
     bike_frame.pack(fill='both', expand=1, pady=(button_width,0))
 
-    bike_label2 = CTkLabel(bike_frame, text="Bike :  ", width=button_width, font=('roboto', button_width*1.2, 'bold'), text_color='#585858')
+    bike_label2 = CTkLabel(bike_frame, text="Bike :  ", width=button_width, font=('roboto', button_width*1.8, 'bold'), text_color='#585858')
     bike_label2.pack(side=LEFT, anchor=E, fill='x', padx=button_width*1.4)
 
-    bike_entry2 = CTkEntry(bike_frame, font=('roboto', button_width*1.2))
+    bike_entry2 = CTkEntry(bike_frame, font=('roboto', button_width*1.8))
     bike_entry2.pack(side=RIGHT, fill='x', expand=1)
 
     total_frame = CTkFrame(entries_and_labels_frame, corner_radius=0, fg_color="transparent")
     total_frame.pack(fill='both', expand=1, pady=(button_width,0))
 
-    total_price_label2 = CTkLabel(total_frame, text="Total :  ", width=button_width, font=('roboto', button_width*1.2, 'bold'), text_color='#585858')
+    total_price_label2 = CTkLabel(total_frame, text="Total :  ", width=button_width, font=('roboto', button_width*1.8, 'bold'), text_color='#585858')
     total_price_label2.pack(side=LEFT, anchor=E, fill='x', padx=button_width*1.3)
 
-    total_price_entry2 = CTkEntry(total_frame, font=('roboto', button_width*1.2))
+    total_price_entry2 = CTkEntry(total_frame, font=('roboto', button_width*1.8))
     total_price_entry2.pack(side=RIGHT, fill='x', expand=1)
 
     work_frame = CTkFrame(entries_and_labels_frame, corner_radius=0, fg_color="transparent")
     work_frame.pack(fill='both', expand=1, pady=button_width)
 
-    work_label2 = CTkLabel(work_frame, text="Work :  ", width=button_width, font=('roboto', button_width*1.2, 'bold'), text_color='#585858')
+    work_label2 = CTkLabel(work_frame, text="Work :  ", width=button_width, font=('roboto', button_width*1.8, 'bold'), text_color='#585858')
     work_label2.pack(side=LEFT, anchor=E, fill='x', padx=button_width*1.3)
 
-    work_entry2 =CTkTextbox(work_frame, height=int(screen_height/13), font=('roboto', button_width*1.2))
+    work_entry2 =CTkTextbox(work_frame, height=int(screen_height/9), font=('roboto', button_width*1.8))
     work_entry2.pack(side=RIGHT, fill='x', expand=1)
 
     buttons_hist = CTkFrame(buttons_hist_frame, fg_color="transparent")
     buttons_hist.pack(fill='x', padx=button_width*2, pady=button_width)
 
-    del_button2 = CTkButton(buttons_hist, text="Update" , command=update_bike_in_db, font=("roboto", button_width*1.5))
+    del_button2 = CTkButton(buttons_hist, text="Update" , command=update_bike_in_db, font=("roboto", button_width*1.8))
     del_button2.pack(side=LEFT, pady=button_width, padx=(0, int(button_width/2)), fill='x', expand=1)
 
-    update_bike_button2 = CTkButton(buttons_hist, text="Delete", command=delete_bike_hist, font=("roboto", button_width*1.5))
+    update_bike_button2 = CTkButton(buttons_hist, text="Delete", command=delete_bike_hist, font=("roboto", button_width*1.8))
     update_bike_button2.pack(side=RIGHT, pady=button_width, padx=(int(button_width/2), 0), fill='x', expand=1)
 
     my_hist_tree.bind("<ButtonRelease-1>", select_record_hist)
@@ -1224,7 +1248,7 @@ def select_for_email(e):
     notif.configure(text='Items Copied!', background='orange', height=2)
 
 menu_width = (screen_width/8)
-button_width = int(menu_width/15)
+button_width = int(menu_width/18)
 
 main_frame = CTkFrame(root)
 main_frame.pack(fill=BOTH, expand=1)
@@ -1236,10 +1260,10 @@ menu_frame.propagate(0)
 butt_padx = button_width
 butt_pady = button_width
 
-title_label = CTkLabel(menu_frame, text="Workshop Helper", font=('roboto', button_width*1.5))
+title_label = CTkLabel(menu_frame, text="Workshop Helper", font=('roboto', button_width*2))
 title_label.pack(pady=(int(button_width*3),int(button_width*1.5)),  padx=button_width*2 ,fill='x')
 
-butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('roboto', int(button_width*1.5), 'bold'))
+butt1 = CTkButton(menu_frame, text='+ Add', command=add_bike, font=('roboto', int(button_width*1.7), 'bold'))
 butt1.pack(
     ipady=button_width // 2,
     pady=(int(button_width * 2), 0),
@@ -1247,20 +1271,20 @@ butt1.pack(
     fill='x',
 )
 
-butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('roboto',  int(button_width*1.5), 'bold'))
+butt2 = CTkButton(menu_frame, text='Update', command=update_bike, font=('roboto',  int(button_width*1.7), 'bold'))
 butt2.pack(
     pady=button_width, ipady=button_width // 2, padx=button_width * 2, fill='x'
 )
 
-butt3 = CTkButton(menu_frame, text='Ready', command=fixed, font=('roboto',  int(button_width*1.5), 'bold'))
+butt3 = CTkButton(menu_frame, text='Ready', command=fixed, font=('roboto',  int(button_width*1.7), 'bold'))
 butt3.pack(ipady=button_width // 2, padx=button_width*2, fill='x')
 
-butt4 = CTkButton(menu_frame, text='Collected', command=fixed_bike, font=('roboto',  int(button_width*1.5), 'bold'))
+butt4 = CTkButton(menu_frame, text='Collected', command=fixed_bike, font=('roboto',  int(button_width*1.7), 'bold'))
 butt4.pack(
     pady=button_width, ipady=button_width // 2, padx=button_width * 2, fill='x'
 )
 
-send_butt = CTkButton(menu_frame, text='Email Quotes', command=send, font=('roboto',  int(button_width*1.5), 'bold'))
+send_butt = CTkButton(menu_frame, text='Email Quotes', command=send, font=('roboto',  int(button_width*1.7), 'bold'))
 send_butt.pack(
     pady=(button_width*3, button_width),
     ipady=button_width // 2,
@@ -1268,7 +1292,7 @@ send_butt.pack(
     fill='x',
 )
 
-notif = Label(menu_frame, text="", font=('roboto',14), wraplength=int(menu_width*1.5), background="#cecece")
+notif = Label(menu_frame, text="", font=('roboto',int(button_width*1.5)), wraplength=int(menu_width*1.2), background="#cecece")
 notif.pack(
     pady=(0, button_width),
     padx=button_width * 2,
@@ -1276,17 +1300,17 @@ notif.pack(
 )
 notif.configure(text="Hold Ctrl and select items by left-clicking them. Press Enter to copy and press Email Quotes to send.", height=5)
 
-optionmenu_1 = CTkOptionMenu(menu_frame, values=["Small", "Standard", "Large"],  command=change_scaling_event, font=("roboto", button_width*1.1, 'bold'))
+optionmenu_1 = CTkOptionMenu(menu_frame, values=["Small", "Standard", "Large"],  command=change_scaling_event, font=("roboto", button_width*1.4, 'bold'))
 optionmenu_1.pack(side=BOTTOM, pady=(button_width, button_width*2), padx=button_width*2 ,fill='x')
 optionmenu_1.set("Standard")
 
-appearance_mode_optionemenu = CTkOptionMenu(menu_frame, values=["Light", "Dark"], command=change_appearance_mode_event, font=("roboto", button_width*1.1, 'bold'))
+appearance_mode_optionemenu = CTkOptionMenu(menu_frame, values=["Light", "Dark"], command=change_appearance_mode_event, font=("roboto", button_width*1.4, 'bold'))
 appearance_mode_optionemenu.pack(side=BOTTOM, padx=button_width*2 ,fill='x')
 
 appearance_mode_label = CTkLabel(menu_frame, text="Appearance Mode:", anchor="w")
 appearance_mode_label.pack(side=BOTTOM)
 
-butt5 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('roboto',  int(button_width*1.4), 'bold'))
+butt5 = CTkButton(menu_frame, text='Delete', command=delete_bike, font=('roboto',  int(button_width*1.7), 'bold'))
 butt5.pack(
     side=BOTTOM,
     ipady=button_width // 2,
@@ -1296,7 +1320,7 @@ butt5.pack(
 )
 
 content_frame = CTkFrame(main_frame, fg_color="transparent")
-content_frame.pack(side=RIGHT, fill=BOTH, expand=1, pady=(button_width*2), padx=button_width*3)
+content_frame.pack(side=RIGHT, fill=BOTH, expand=1)
 
 my_tree_frame = CTkFrame(content_frame, border_width=2)
 my_tree_frame.pack( expand=True, fill='both', padx=button_width, pady=button_width)
@@ -1307,7 +1331,7 @@ my_tree.pack(fill='both', expand=True, padx=button_width, pady=button_width)
 my_tree['columns'] = ('Ready', 'Name', 'Phone', 'Bike', 'ID', 'Date','Total')
 
 my_tree.column('#0', width=0, stretch=NO)
-my_tree.column("Ready", anchor=CENTER, width=button_width*4)
+my_tree.column("Ready", anchor=CENTER, width=button_width*8)
 my_tree.column("Name", anchor=CENTER)
 my_tree.column("Phone", anchor=CENTER)
 my_tree.column("Bike", anchor=CENTER)
@@ -1342,7 +1366,7 @@ s.map('Treeview', background=[('selected', '#55bd7f')],foreground=[('selected', 
 my_tree.tag_configure('oddrow', background= '#cccccc', foreground='#121212')
 my_tree.tag_configure('evenrow',background='#dddddd', foreground='#121212')
 
-bar_label = CTkLabel(my_tree_frame, text='Shop capacity ( Max: 25 ) : ', font=('roboto', button_width, 'bold'))
+bar_label = CTkLabel(my_tree_frame, text='Shop capacity ( Max: 25 ) : ', font=('roboto', int(button_width*1.5), 'bold'))
 bar_label.pack(side=LEFT, padx=(button_width,0 ), pady=(0, button_width // 2))
 
 progressbar = CTkProgressBar(master=my_tree_frame)
@@ -1366,7 +1390,7 @@ details_and_label_pre_frame.pack(side=LEFT, fill='both', expand=1, pady=button_w
 details_and_label_frame = CTkFrame(details_and_label_pre_frame)
 details_and_label_frame.pack(padx=button_width, pady=button_width, side=LEFT, fill='both', expand=1)
 
-service_details_title = CTkLabel(details_and_label_frame,text='Service Details' , font=('roboto', button_width*1.6, 'bold'))
+service_details_title = CTkLabel(details_and_label_frame,text='Service Details' , font=('roboto', button_width*1.9, 'bold'))
 service_details_title.pack(padx=button_width, pady=(button_width, button_width))
 
 separator = Frame(details_and_label_frame, background="#727272", height=2)
@@ -1374,20 +1398,20 @@ separator.pack(padx=button_width*3, fill='x', anchor=N)
 
 service_text = StringVar()
 service_text.set('Click On A Customer For More Information')
-service_details_label = CTkLabel(details_and_label_frame, justify=CENTER, wraplength=details_and_label_width, textvariable=service_text , font=('roboto', button_width*1.5))
+service_details_label = CTkLabel(details_and_label_frame, justify=CENTER, wraplength=details_and_label_width, textvariable=service_text , font=('roboto', button_width*1.9))
 service_details_label.pack(pady=button_width/3)
 
 service_details_frame = CTkFrame(details_and_label_pre_frame)
 service_details_frame.pack(padx=(0, button_width), pady=(butt_pady), side=RIGHT, fill='y')
 
-need_quote_title = CTkLabel(service_details_frame , text='Need Quote', font=('roboto', button_width*1.6, 'bold'), width=screen_width/5)
+need_quote_title = CTkLabel(service_details_frame , text='Need Quote', font=('roboto', button_width*1.9, 'bold'), width=screen_width/5)
 need_quote_title.pack(padx=button_width*2, pady=(butt_pady))
 
 separator3 = Frame(service_details_frame, background="#727272", height=2)
 separator3.pack(padx=button_width*3, fill='x', anchor=N, pady=(0, button_width))
 
 quote = StringVar()
-need_quote_label = CTkLabel(service_details_frame, justify=CENTER, wraplength=details_and_label_width, textvariable=quote , font=('roboto', button_width*1.3))
+need_quote_label = CTkLabel(service_details_frame, justify=CENTER, wraplength=details_and_label_width, textvariable=quote , font=('roboto', button_width*1.9))
 need_quote_label.pack(pady=(0), fill='y', padx=button_width*2)
 
 lower_pre_frame = CTkFrame(more_butt_frame, border_width=2)
@@ -1396,13 +1420,13 @@ lower_pre_frame.pack(side=LEFT, pady=button_width, padx=(button_width*2, button_
 lower_butt_frame = CTkFrame(lower_pre_frame)
 lower_butt_frame.pack(padx=button_width, pady=button_width, fill='x')
 
-due_butt = CTkButton(lower_butt_frame, text='Reset Quotes', font=('roboto',  int(button_width*1.3), 'bold'), command=reset_quotes)
+due_butt = CTkButton(lower_butt_frame, text='Reset Quotes', font=('roboto',  int(button_width*1.5), 'bold'), command=reset_quotes)
 due_butt.pack(pady=( button_width, 0), padx=( button_width*2), fill='both', expand=1, ipadx=button_width*1.2, ipady=button_width/3)
 
-hist_butt = CTkButton(lower_butt_frame, text='History', command=get_history, font=('roboto',  int(button_width*1.3), 'bold'))
+hist_butt = CTkButton(lower_butt_frame, text='History', command=get_history, font=('roboto',  int(button_width*1.5), 'bold'))
 hist_butt.pack(pady=(button_width), padx=(button_width*2), fill='both', expand=1, ipadx=button_width*1.2, ipady=button_width/3)
 
-email_settings_butt = CTkButton(lower_butt_frame, text='Email Settings', command=email_settings, font=('roboto',  int(button_width*1.3), 'bold'))
+email_settings_butt = CTkButton(lower_butt_frame, text='Email Settings', command=email_settings, font=('roboto',  int(button_width*1.5), 'bold'))
 email_settings_butt.pack(pady=(0, button_width), padx=(button_width*2), fill='both', expand=1, ipadx=button_width*1.2, ipady=button_width/3)
 
 set_cred()
