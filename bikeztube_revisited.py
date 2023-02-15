@@ -180,7 +180,7 @@ def add_bike():
     work_entry = CTkTextbox(entries_frame, font=('roboto',14), width=button_width*35, height=button_width*10)
     work_entry.grid(row=4, column=1, columnspan=5, sticky=W)
 
-    add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('roboto', button_width), width=button_width*7)
+    add_but = CTkButton(entries_frame, text="Add", command=add_bike_to_database, font=('roboto', button_width*2), width=button_width*7)
     add_but.grid(row=5, column=3, sticky=E, pady=20)
 
     service_parts = CTkFrame(add_level)
@@ -434,7 +434,7 @@ def update_bike():
         work_entry1 = CTkTextbox(entries_frame1, font=('roboto',14), width=button_width*35)
         work_entry1.grid(row=5, column=1, columnspan=3, sticky=W)
 
-        update_but1 = CTkButton(entries_frame1, text="Update", command=update_bike_in_database, font=('roboto', button_width), width=button_width*7)
+        update_but1 = CTkButton(entries_frame1, text="Update", command=update_bike_in_database, font=('roboto', button_width*2), width=button_width*7)
         update_but1.grid(row=6, column=3, sticky=E, pady=20)
 
         service_parts1 = CTkFrame(update_level)
@@ -818,7 +818,7 @@ def get_history():
     work_label2 = CTkLabel(work_frame, text="Work :  ", width=button_width, font=('roboto', button_width*1.8, 'bold'), text_color='#585858')
     work_label2.pack(side=LEFT, anchor=E, fill='x', padx=button_width*1.3)
 
-    work_entry2 =CTkTextbox(work_frame, height=int(screen_height/9), font=('roboto', button_width*1.8))
+    work_entry2 =CTkTextbox(work_frame, height=int(screen_height/6), font=('roboto', button_width*1.8))
     work_entry2.pack(side=RIGHT, fill='x', expand=1)
 
     buttons_hist = CTkFrame(buttons_hist_frame, fg_color="transparent")
@@ -1353,9 +1353,9 @@ my_tree.tag_configure('evenrow',background='#303030', foreground='white')
 
 s = ttk.Style()
 s.theme_use('classic')
-tree_font_size = int(button_width*1.7)
+tree_font_size = int(button_width*2)
 
-s.configure('Treeview.Heading', background="#ffffff", foreground='#464646', font=('roboto', tree_font_size, 'bold' ), borderwidth=0 )
+s.configure('Treeview.Heading', background="#ffffff", foreground='#464646', font=('roboto', int(tree_font_size/1.1), 'bold' ), borderwidth=0 )
 s.configure(
     'Treeview',
     rowheight=int(tree_font_size * 2.5),
