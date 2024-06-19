@@ -19,7 +19,7 @@ lightgreen2= '#DBE4CB'
 darkgreen = '#909CC2'
 
 root = CTk()
-root.title("Bikeztube")
+root.title("Workshop Helper")
 root.state('zoomed') 
 
 screen_width = root.winfo_screenwidth()
