@@ -6,9 +6,6 @@ import sqlite3
 from tkinter import messagebox
 from itertools import count
 from customtkinter import *
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 
 darkpurple = '#3B3355'
@@ -941,7 +938,6 @@ def set_dark():
     s.map('Treeview', background=[('selected', '#319f6d')])
     my_tree.tag_configure('oddrow', background= '#363636', foreground='white')
     my_tree.tag_configure('evenrow',background='#303030', foreground='white')
-    notif.configure(background="#343434", fg="#ffffff")
 
 def fixed_bike():
     global progressbar
@@ -1070,183 +1066,6 @@ def reset_quotes():
     conn.close() 
     quote.set("No awaiting bicycles for quotation")
 
-def set_cred():
-    global temp_username
-    global temp_password
-    global temp_receiver
-    global temp_subject
-    global temp_body
-    with contextlib.suppress(Exception):
-        from_set_cred_(
-            temp_username, temp_password, temp_receiver, temp_subject
-        )
-
-
-def from_set_cred_(temp_username, temp_password, temp_receiver, temp_subject):
-    conn = sqlite3.connect('bikes.db')
-    c = conn.cursor()
-    c.execute("SELECT * FROM cre")
-    reslt = c.fetchall()
-    cred_list = reslt[0]
-    temp_username.set(cred_list[0])
-    temp_password.set(cred_list[1])
-    temp_receiver.set(cred_list[2])
-    temp_subject.set(cred_list[3])
-    conn.commit()
-    conn.close()
-
-def save():
-    global temp_username
-    global temp_password
-    global temp_receiver
-    global temp_subject
-    global temp_body
-    global notif
-
-    try:
-        username = temp_username.get()
-        password = temp_password.get()
-        to = temp_receiver.get()
-        subject = temp_subject.get()
-
-        conn = sqlite3.connect('bikes.db')
-        c = conn.cursor()
-        c.execute("DELETE FROM cre")
-        c.execute("INSERT INTO cre VALUES (:usr, :pss, :recip, :sub)",
-            {
-                'usr':username,
-                'pss':password,
-                'recip':to,
-                'sub':subject
-                })
-        c.execute("SELECT * FROM cre")
-        cred = c.fetchall()
-        cred_list2 = cred[0]
-        temp_username.set(cred_list2[0])
-        temp_password.set(cred_list2[1])
-        temp_receiver.set(cred_list2[2])
-        temp_subject.set(cred_list2[3])
-
-        conn.commit()
-        conn.close()
-        notif.configure(text="Settings saved!", background='lightgreen', height=2)
-    except Exception:
-        notif.configure(text="Error while making changes", background='red', height=2)
-
-def email_settings():
-    def reset_mail():
-        email_entry.delete(0, 'end')
-        pass_entry.delete(0, 'end')
-        to_entry.delete(0, 'end')
-        subject_entry.delete(0, 'end')
-        body_entry.delete(0, 'end')
-
-    email_level = CTkToplevel(root)
-
-    email_level.wm_transient(root)    
-
-    entries_buttons_and_work_email = CTkFrame(email_level)
-    entries_buttons_and_work_email.pack(fill='both', expand=True, side=LEFT)
-
-    entries_frame_email = CTkFrame(entries_buttons_and_work_email)
-    entries_frame_email.pack(padx=20, pady=20, ipadx=50)
-
-    email_label = CTkLabel(entries_frame_email, text="Email : ", font=('roboto', 14, 'bold'))
-    email_label.grid(row=1, column=0, sticky=W, padx=(button_width, 0), pady=(button_width,0))
-    pass_label = CTkLabel(entries_frame_email, text="Password : ", font=('roboto', 14, 'bold'))
-    pass_label.grid(row=1, column=2, padx=(button_width*1.3, 0), pady=(button_width,0))
-    to_label = CTkLabel(entries_frame_email, text="To : ", font=('roboto', 14, 'bold'))
-    to_label.grid(row=2, column=0, sticky=W, padx=(button_width, 0))
-    subject_label = CTkLabel(entries_frame_email, text="Subject : ", font=('roboto', 14, 'bold'))
-    subject_label.grid(row=2, column=2, padx=(button_width*1.3, 0))
-    body_label = CTkLabel(entries_frame_email, text="Body : ", font=('roboto', 14, 'bold'))
-    body_label.grid(row=4, column=0, sticky=NW, padx=(button_width, 0))
-
-    email_entry = CTkEntry(entries_frame_email, textvariable=temp_username, font=('roboto',14))
-    email_entry.grid(row=1, column=1, sticky=W, pady=(button_width,0))
-    pass_entry = CTkEntry(entries_frame_email, textvariable=temp_password, show="*", font=('roboto',14))
-    pass_entry.grid(row=1, column=3, sticky=W, pady=(button_width,0))
-    to_entry = CTkEntry(entries_frame_email, textvariable=temp_receiver, font=('roboto',14 ))
-    to_entry.grid(row=2, column=1, sticky=W, pady=20)
-    subject_entry = CTkEntry(entries_frame_email, textvariable=temp_subject, font=('roboto',14))
-    subject_entry.grid(row=2, column=3, sticky=W)
-    body_entry = CTkEntry(entries_frame_email, textvariable=temp_body, font=('roboto',14), width=button_width*25)
-    body_entry.grid(row=4, column=1, columnspan=3, sticky=W)
-
-    notif2 = CTkLabel(entries_frame_email, text="", font=('roboto',14))
-    notif2.grid(row=5, column=3, sticky=E, pady=20)
-
-    save_but = CTkButton(entries_frame_email, text="Save", command=save,  font=('roboto', button_width*1.5, 'bold'), width=button_width*7)
-    save_but.grid(row=6, column=3, sticky=E, pady=20)
-    reset_but = CTkButton(entries_frame_email, text="Reset", command=reset_mail,  font=('roboto', button_width*1.5, 'bold'), width=button_width*7)
-    reset_but.grid(row=6, column=2, sticky=E, pady=20)
-
-    email_level.mainloop()
-
-def send():
-    try:
-        username = temp_username.get()
-        password = temp_password.get()
-        to = temp_receiver.get()
-        subject = temp_subject.get()
-        body = temp_body.get()
-
-        if username == "" or password == "" or to == "" or subject == "" or body == "":
-            notif.configure(text='All fields are required!', background='red', padx=button_width, height=2)
-            return
-        else:
-            server = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
-            server.starttls()
-            server.login(username, password)
-
-            msg = MIMEMultipart()   
-
-            msg['From']= username
-            msg['To']= to
-            msg['Subject']=subject
-
-            msg.attach(MIMEText(body, 'plain'))
-
-            server.send_message(msg)
-
-            server.quit()
-            del msg
-
-            notif.configure(text='Email has been sent', background='green', foreground='#ffffff', height=2)
-
-    except Exception:
-        notif.configure(text="Error sending email", background='red', height=2)
-
-temp_username = StringVar()
-temp_password = StringVar()
-temp_receiver = StringVar()
-temp_subject = StringVar()
-temp_body = StringVar()
-
-@staticmethod
-def select_for_email(e):
-    global temp_body
-    global my_tree
-
-    list_for_email = []
-    curItems = my_tree.selection()
-    [list_for_email.append(my_tree.item(i)['values']) for i in curItems]
-    selected_items_forEmail = []
-
-    conn = sqlite3.connect('bikes.db')
-    c = conn.cursor()
-    for i in list_for_email:
-        c.execute(f'SELECT * FROM bikes WHERE rowid={str(i[4])}')
-        records = c.fetchall()
-        selected_items_forEmail.append(records[0])
-    conn.commit()
-    conn.close()
-
-    for s in selected_items_forEmail:
-        temp_body.set(temp_body.get() + str(s[0])+" - " + str(s[2])+" - " + str(s[4])+"\n")
-
-    notif.configure(text='Items Copied!', background='orange', height=2)
-
 menu_width = (screen_width/8)
 button_width = int(menu_width/18)
 
@@ -1283,22 +1102,6 @@ butt4 = CTkButton(menu_frame, text='Collected', command=fixed_bike, font=('robot
 butt4.pack(
     pady=button_width, ipady=button_width // 2, padx=button_width * 2, fill='x'
 )
-
-send_butt = CTkButton(menu_frame, text='Email Quotes', command=send, font=('roboto',  int(button_width*1.7), 'bold'))
-send_butt.pack(
-    pady=(button_width*3, button_width),
-    ipady=button_width // 2,
-    padx=button_width * 2,
-    fill='x',
-)
-
-notif = Label(menu_frame, text="", font=('roboto',int(button_width*1.5)), wraplength=int(menu_width*1.2), background="#cecece")
-notif.pack(
-    pady=(0, button_width),
-    padx=button_width * 2,
-   fill='x'
-)
-notif.configure(text="Hold Ctrl and select items by left-clicking them. Press Enter to copy and press Email Quotes to send.", height=5)
 
 optionmenu_1 = CTkOptionMenu(menu_frame, values=["Small", "Standard", "Large"],  command=change_scaling_event, font=("roboto", button_width*1.4, 'bold'))
 optionmenu_1.pack(side=BOTTOM, pady=(button_width, button_width*2), padx=button_width*2 ,fill='x')
@@ -1426,16 +1229,12 @@ due_butt.pack(pady=( button_width, 0), padx=( button_width*2), fill='both', expa
 hist_butt = CTkButton(lower_butt_frame, text='History', command=get_history, font=('roboto',  int(button_width*1.5), 'bold'))
 hist_butt.pack(pady=(button_width), padx=(button_width*2), fill='both', expand=1, ipadx=button_width*1.2, ipady=button_width/3)
 
-email_settings_butt = CTkButton(lower_butt_frame, text='Email Settings', command=email_settings, font=('roboto',  int(button_width*1.5), 'bold'))
-email_settings_butt.pack(pady=(0, button_width), padx=(button_width*2), fill='both', expand=1, ipadx=button_width*1.2, ipady=button_width/3)
 
-set_cred()
 refresh_quotes()
 set_widget_scaling(0.9)
 query_database()
 change_scaling_event(0.0)
 my_tree.bind("<ButtonRelease-1>", select_record)
-my_tree.bind("<Return>", select_for_email)
 capacity()
 
 root.mainloop()
